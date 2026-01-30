@@ -8,6 +8,7 @@ import {
   Search,
   ChevronRight,
   Star,
+  Filter,
 } from "lucide-react";
 import { analyzeSymptoms, findHospitals } from "./api/api";
 import HospitalDetail from "./components/HospitalDetail";
@@ -21,6 +22,7 @@ function App() {
   const [selectedHospital, setSelectedHospital] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [hospitalFilter, setHospitalFilter] = useState("all");
 
   const handleAnalyze = async () => {
     if (!symptoms.trim()) return;
@@ -285,14 +287,16 @@ function App() {
                       Your Location
                     </label>
                     <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="text"
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                      <select
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-slate-700 text-sm md:text-base"
-                        placeholder="Enter your city"
-                      />
+                        className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-slate-700 text-sm md:text-base appearance-none bg-white cursor-pointer"
+                      >
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Gandhinagar">Gandhinagar</option>
+                      </select>
+                      <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none rotate-90" />
                     </div>
                   </div>
 
@@ -376,12 +380,38 @@ function App() {
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Results */}
             <div className="lg:col-span-2 space-y-4">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">
-                Recommended Hospitals & Doctors
-              </h3>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <h3 className="text-2xl font-bold text-slate-900">
+                  Recommended Hospitals & Doctors
+                </h3>
+                
+                {/* Filter Dropdown */}
+                <div className="flex items-center gap-2 bg-white rounded-xl px-4 py-2.5 shadow-sm border border-slate-200 min-w-[200px]">
+                  <Filter className="w-4 h-4 text-slate-400" />
+                  <select
+                    value={hospitalFilter}
+                    onChange={(e) => setHospitalFilter(e.target.value)}
+                    className="flex-1 bg-transparent border-none outline-none text-sm font-medium text-slate-700 cursor-pointer"
+                  >
+                    <option value="all">All Hospitals</option>
+                    <option value="government">Government</option>
+                    <option value="trust">Trust</option>
+                    <option value="private">Private</option>
+                    <option value="premium">Premium</option>
+                  </select>
+                </div>
+              </div>
 
-              {hospitals && hospitals.length > 0 ? (
-                hospitals.map((hospital, i) => (
+              {(() => {
+                const filteredHospitals = hospitals
+                  .filter(hospital => {
+                    if (hospitalFilter === "all") return true;
+                    const hospitalType = (hospital.hospital_type || "").toLowerCase();
+                    return hospitalType === hospitalFilter;
+                  });
+
+                return filteredHospitals.length > 0 ? (
+                  filteredHospitals.map((hospital, i) => (
                   <div
                     key={hospital._id || i}
                     className="bg-white rounded-2xl p-6 shadow-lg shadow-slate-200/50 border border-slate-100 hover:shadow-xl transition-shadow"
@@ -453,11 +483,14 @@ function App() {
                     </div>
                   </div>
                 ))
-              ) : (
-                <div className="bg-white rounded-2xl p-8 text-center text-slate-500">
-                  No hospitals found for this search.
-                </div>
-              )}
+                ) : (
+                  <div className="bg-white rounded-2xl p-8 text-center text-slate-500">
+                    {hospitalFilter !== "all" 
+                      ? `No ${hospitalFilter} hospitals found. Try selecting a different filter.`
+                      : "No hospitals found for this search."}
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Summary Sidebar */}
@@ -547,7 +580,7 @@ function App() {
             <strong>Disclaimer:</strong> AI-generated results for informational
             purposes only. Always consult medical professionals for emergencies.
           </p>
-          <p className="text-xs mt-2 text-slate-500">Powered by Gemini AI</p>
+          
         </div>
       </footer>
     </div>
