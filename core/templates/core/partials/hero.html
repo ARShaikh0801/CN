@@ -1,0 +1,92 @@
+<!-- HERO SECTION -->
+<section id="hero-section" class="relative min-h-[85vh] md:min-h-screen flex items-center overflow-hidden py-8 md:py-0">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div
+            class="absolute top-20 right-10 w-72 h-72 bg-gradient-to-br from-blue-400/30 to-cyan-400/30 rounded-full blur-3xl animate-pulse">
+        </div>
+        <div class="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 1s"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-blue-300/20 to-cyan-300/20 rounded-full blur-2xl animate-pulse"
+            style="animation-delay: 2s"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center relative">
+
+            <!-- Mobile Icon Composition -->
+            <div class="md:hidden w-full flex justify-center mb-6 relative z-10">
+                <div class="relative w-64 h-64">
+                    <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/50 animate-pulse">
+                        <i data-lucide="heart" class="w-16 h-16 text-white"></i>
+                    </div>
+                    <!-- Icons omitted/simplified for brevity or added via JS/CSS if needed, keeping main structure -->
+                </div>
+            </div>
+
+            <div class="text-center md:text-left space-y-4 md:space-y-6 z-10 relative">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight">
+                    AI-Powered Healthcare Assistant
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-600 leading-relaxed">
+                    Find the Right Care, Right When You Need It
+                </p>
+                <p class="text-base sm:text-lg text-slate-500">
+                    Describe your symptoms and get instant recommendations for nearby specialists, hospitals, and
+                    estimated treatment costs.
+                </p>
+            </div>
+
+            <!-- Desktop Icon Composition -->
+            <div class="hidden md:flex justify-center items-center relative">
+                <div class="relative w-96 h-96">
+                    <!-- Central Heart Pulse -->
+                    <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-500 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/50 animate-pulse z-10">
+                        <i data-lucide="heart" class="w-24 h-24 text-white"></i>
+                    </div>
+
+                    <!-- Orbiting Icons (Clockwise starting from Top) -->
+
+                    <!-- 12 o'clock: Map Pin -->
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 animate-float">
+                        <div class="bg-white rounded-full p-3.5 shadow-lg shadow-blue-500/10">
+                            <i data-lucide="map-pin" class="w-6 h-6 text-blue-500"></i>
+                        </div>
+                    </div>
+
+                    <!-- 2 o'clock: Search -->
+                    <div class="absolute top-10 -right-4 animate-float-delayed">
+                        <div class="bg-white rounded-full p-4 shadow-xl shadow-blue-500/20">
+                            <i data-lucide="search" class="w-8 h-8 text-cyan-500"></i>
+                        </div>
+                    </div>
+
+                    <!-- 4 o'clock: Star (Closer in) -->
+                    <div class="absolute bottom-20 right-0 animate-float" style="animation-delay: 1.5s;">
+                        <div class="bg-white rounded-full p-3 shadow-lg">
+                            <i data-lucide="star" class="w-5 h-5 text-yellow-500 fill-current"></i>
+                        </div>
+                    </div>
+
+                    <!-- 6 o'clock: Hospital -->
+                    <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 animate-float-delayed"
+                        style="animation-delay: 2s;">
+                        <div class="bg-white rounded-full p-5 shadow-2xl shadow-blue-500/20">
+                            <i data-lucide="hospital" class="w-10 h-10 text-emerald-500"></i>
+                        </div>
+                    </div>
+
+                    <!-- 10 o'clock: Trending Up -->
+                    <div class="absolute top-10 -left-4 animate-float" style="animation-delay: 0.5s;">
+                        <div class="bg-white rounded-full p-4 shadow-xl shadow-blue-500/20">
+                            <i data-lucide="trending-up" class="w-8 h-8 text-blue-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

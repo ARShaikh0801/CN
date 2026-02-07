@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareNavigator - AI Powered Healthcare Assistant</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-slate-50">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-gradient-to-br from-[#eaf6ff]/80 via-[#f4fbff]/80 to-white/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 md:py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <h1 class="text-xl md:text-2xl font-bold text-slate-900">CareNavigator</h1>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-blue-100/50 text-slate-700 mt-20 py-8">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-sm">
+                <strong>Disclaimer:</strong> AI-generated results for informational purposes only. Always consult
+                medical professionals for emergencies.
+            </p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/app.js' %}"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
