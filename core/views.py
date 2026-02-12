@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from core.models import Hospital
@@ -92,6 +92,80 @@ def search_hospitals(request):
             
         return JsonResponse({'hospitals': enriched_hospitals})
         
+
     except Exception as e:
         print(f"Hospital search error: {e}")
         return JsonResponse({'error': 'Failed to fetch hospitals'}, status=500)
+
+def all_hospitals(request):
+    try:
+        # Get filter parameters
+        city_filter = request.GET.get('city')
+        type_filter = request.GET.get('type')
+        rating_filter = request.GET.get('rating')
+
+        hospitals = Hospital.objects.all()
+
+        if city_filter:
+            hospitals = hospitals.filter(city__iexact=city_filter)
+        
+        if type_filter:
+            hospitals = hospitals.filter(hospital_type__iexact=type_filter)
+            
+        if rating_filter:
+            try:
+                min_rating = float(rating_filter)
+                hospitals = hospitals.filter(rating__gte=min_rating)
+            except ValueError:
+                pass
+
+
+        # Get unique values for filters
+        cities = Hospital.objects.values_list('city', flat=True).distinct().order_by('city')
+        types = Hospital.HOSPITAL_TYPES
+
+        # Enrich hospitals for template
+        enriched_hospitals = []
+        for h in hospitals:
+            enriched_hospitals.append({
+                'id': h.id,
+                'name': h.name,
+                'address': h.address,
+                'city': h.city,
+                'rating': h.rating,
+                'rating_range': range(int(h.rating)) if h.rating else [], # For star loop
+                'hospital_type': h.get_hospital_type_display(),
+                'type_code': h.hospital_type,
+                'lat': h.lat,
+                'lng': h.lng,
+                'map_url': f"https://www.google.com/maps?q={h.lat},{h.lng}" if h.lat and h.lng else None,
+                'specialities': h.specialities[:3], # Show first 3
+                'more_specialities_count': len(h.specialities) - 3 if len(h.specialities) > 3 else 0
+            })
+
+        context = {
+            'hospitals': enriched_hospitals,
+            'cities': cities,
+            'hospital_type_choices': types, 
+            'current_filters': {
+                'city': city_filter,
+                'type': type_filter,
+                'rating': rating_filter
+            }
+        }
+        return render(request, 'core/all_hospitals.html', context)
+    except Exception as e:
+        print(f"Error in all_hospitals: {e}")
+        return render(request, 'core/index.html', {'error': 'Failed to load hospitals'})
+
+def hospital_detail(request, pk):
+    hospital = get_object_or_404(Hospital, pk=pk)
+    
+    # Context data similar to what's used in cards, but more detailed if available
+    context = {
+        'hospital': hospital,
+        'rating_range': range(int(hospital.rating)) if hospital.rating else [],
+        'map_url': f"https://www.google.com/maps?q={hospital.lat},{hospital.lng}" if hospital.lat and hospital.lng else None,
+        'hospital_type_label': hospital.get_hospital_type_display(),
+    }
+    return render(request, 'core/hospital_detail.html', context)

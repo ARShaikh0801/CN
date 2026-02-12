@@ -23,8 +23,17 @@
     <header class="sticky top-0 z-50 bg-gradient-to-br from-[#eaf6ff]/80 via-[#f4fbff]/80 to-white/80 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 md:py-4 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <h1 class="text-xl md:text-2xl font-bold text-slate-900">CareNavigator</h1>
+                <a href="{% url 'index' %}" class="flex items-center gap-2">
+                    <h1 class="text-xl md:text-2xl font-bold text-slate-900">CareNavigator</h1>
+                </a>
             </div>
+
+            <nav class="flex items-center gap-6">
+                <a href="{% url 'index' %}"
+                    class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Home</a>
+                <a href="{% url 'all_hospitals' %}"
+                    class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">All Hospitals</a>
+            </nav>
         </div>
     </header>
 

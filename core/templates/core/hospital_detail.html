@@ -1,0 +1,223 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 pb-16">
+    <!-- Hero Section with Enhanced Gradient -->
+    <div class="bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 py-16 lg:py-20 relative overflow-hidden">
+        <!-- Animated Background Pattern -->
+        <div
+            class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 animate-pulse">
+        </div>
+        <!-- Gradient Overlay Orbs -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-700/20 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Back Button -->
+            <a href="{% url 'all_hospitals' %}"
+                class="inline-flex items-center gap-2 text-white/90 hover:text-white mb-8 transition-all text-sm font-semibold group">
+                <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                Back to All Hospitals
+            </a>
+
+            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
+                <!-- Hospital Info -->
+                <div class="flex-1">
+                    <!-- Badges -->
+                    <div class="flex flex-wrap items-center gap-3 mb-4">
+                        <span
+                            class="px-4 py-1.5 bg-white/25 backdrop-blur-md text-white rounded-full text-xs font-bold uppercase tracking-wider border border-white/20 shadow-lg">
+                            {{ hospital_type_label }}
+                        </span>
+                        {% if hospital.rating %}
+                        <div
+                            class="flex items-center gap-2 bg-gradient-to-r from-yellow-400/30 to-amber-400/30 backdrop-blur-md px-4 py-1.5 rounded-full border border-yellow-300/40 text-white shadow-lg">
+                            <div class="flex gap-0.5">
+                                {% for i in rating_range %}
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-200 fill-current"></i>
+                                {% endfor %}
+                            </div>
+                            <span class="text-sm font-bold">{{ hospital.rating }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Hospital Name -->
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
+                        {{ hospital.name }}
+                    </h1>
+
+                    <!-- Address -->
+                    <div class="flex items-start gap-3 text-blue-50 text-base md:text-lg">
+                        <i data-lucide="map-pin" class="w-6 h-6 shrink-0 mt-0.5"></i>
+                        <span class="leading-relaxed">{{ hospital.address }}</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-3">
+                    {% if map_url %}
+                    <a href="{{ map_url }}" target="_blank"
+                        class="inline-flex items-center gap-2 bg-white text-blue-600 font-bold py-3.5 px-7 rounded-xl hover:bg-blue-50 hover:shadow-2xl hover:scale-105 transition-all shadow-xl">
+                        <i data-lucide="map" class="w-5 h-5"></i>
+                        Get Directions
+                    </a>
+                    {% endif %}
+                    <button
+                        class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white font-bold py-3.5 px-7 rounded-xl hover:bg-white/30 transition-all border border-white/30 shadow-lg hover:shadow-xl hover:scale-105">
+                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                        Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content with Elevated Cards -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Primary Information -->
+            <div class="lg:col-span-2 space-y-8">
+
+                <!-- Medical Specialities Card -->
+                <div
+                    class="bg-white rounded-3xl p-8 lg:p-10 shadow-2xl shadow-blue-100/50 border border-slate-100/50 hover:shadow-blue-200/60 transition-all duration-300">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                            <i data-lucide="stethoscope" class="w-7 h-7"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-900">Medical Specialities</h3>
+                            <p class="text-sm text-slate-500">Available departments and services</p>
+                        </div>
+                    </div>
+
+                    {% if hospital.specialities %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for spec in hospital.specialities %}
+                        <div
+                            class="group flex items-center gap-4 p-5 bg-gradient-to-br from-slate-50 to-blue-50/30 rounded-2xl border border-slate-200/50 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer">
+                            <div
+                                class="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:scale-125 group-hover:shadow-lg group-hover:shadow-blue-400/50 transition-all">
+                            </div>
+                            <span
+                                class="font-bold text-slate-700 group-hover:text-blue-700 transition-colors text-base">
+                                {{ spec }}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="p-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 text-center">
+                        <i data-lucide="info" class="w-8 h-8 text-slate-400 mx-auto mb-2"></i>
+                        <p class="text-slate-500 font-medium">No specific specialities listed.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Insurance & Schemes Card -->
+                <div
+                    class="bg-white rounded-3xl p-8 lg:p-10 shadow-2xl shadow-green-100/50 border border-slate-100/50 hover:shadow-green-200/60 transition-all duration-300">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-white shadow-lg shadow-green-500/30">
+                            <i data-lucide="shield-check" class="w-7 h-7"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-900">Accepted Insurance & Schemes</h3>
+                            <p class="text-sm text-slate-500">Payment methods and coverage</p>
+                        </div>
+                    </div>
+
+                    {% if hospital.acceptedSchemes %}
+                    <div class="flex flex-wrap gap-3">
+                        {% for scheme in hospital.acceptedSchemes %}
+                        <span
+                            class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-br from-emerald-50 to-green-50 text-green-700 font-bold border border-green-200/50 hover:shadow-lg hover:shadow-green-100/50 hover:scale-105 transition-all cursor-pointer">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-green-600"></i>
+                            {{ scheme.schemeName }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div
+                        class="p-8 bg-gradient-to-br from-slate-50 to-green-50/20 rounded-2xl border-2 border-dashed border-slate-300 text-center">
+                        <i data-lucide="phone" class="w-8 h-8 text-slate-400 mx-auto mb-3"></i>
+                        <p class="text-slate-600 font-semibold mb-1">Insurance Information</p>
+                        <p class="text-slate-500 text-sm">Contact hospital directly for insurance details.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <!-- Right Column: Contact & Actions -->
+            <div class="lg:col-span-1 space-y-6">
+
+                <!-- Contact Information Card -->
+                <div
+                    class="bg-white rounded-3xl p-7 shadow-2xl shadow-slate-200/50 border border-slate-100/50 hover:shadow-slate-300/60 transition-all duration-300 sticky top-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                        <i data-lucide="phone-call" class="w-5 h-5 text-blue-600"></i>
+                        Contact Information
+                    </h3>
+
+                    <div class="space-y-5">
+                        {% if hospital.contact %}
+                        <a href="tel:{{ hospital.contact }}"
+                            class="group flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-600/40 hover:scale-105">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                <i data-lucide="phone" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-blue-100 uppercase tracking-wider">Emergency Line</p>
+                                <p class="text-xl font-extrabold text-white">{{ hospital.contact }}</p>
+                            </div>
+                        </a>
+                        {% endif %}
+
+                        <div class="flex items-start gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200/50">
+                            <div class="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center shrink-0">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-slate-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-900 mb-2">Full Address</p>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-2">{{ hospital.address }}</p>
+                                <p class="text-sm text-slate-700 font-semibold">{{ hospital.city }} - {{
+                                    hospital.pincode }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Symptom Checker CTA -->
+                <div
+                    class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-7 text-white shadow-2xl shadow-slate-900/30 border border-slate-700/50 relative overflow-hidden">
+                    <!-- Decorative Elements -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
+                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
+                            <i data-lucide="activity" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Need a Checkup?</h3>
+                        <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                            Use our AI-powered Symptom Checker to get a preliminary health analysis before your visit.
+                        </p>
+                        <a href="{% url 'index' %}"
+                            class="block w-full text-center bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-900/50 hover:shadow-xl hover:shadow-blue-900/70 hover:scale-105">
+                            Check Symptoms Now
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
