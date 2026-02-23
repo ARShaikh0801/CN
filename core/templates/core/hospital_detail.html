@@ -1,223 +1,481 @@
 {% extends 'core/base.html' %}
 {% load static %}
-
+{% load custom_filters %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/hospital_detail.css' %}">
+{% endblock %}
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 pb-16">
-    <!-- Hero Section with Enhanced Gradient -->
-    <div class="bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 py-16 lg:py-20 relative overflow-hidden">
-        <!-- Animated Background Pattern -->
-        <div
-            class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 animate-pulse">
-        </div>
-        <!-- Gradient Overlay Orbs -->
-        <div class="absolute top-0 right-0 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-700/20 rounded-full blur-3xl"></div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <!-- Back Button -->
-            <a href="{% url 'all_hospitals' %}"
-                class="inline-flex items-center gap-2 text-white/90 hover:text-white mb-8 transition-all text-sm font-semibold group">
-                <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
-                Back to All Hospitals
+
+<div class="detail-page">
+
+  <!-- ── HERO ── -->
+  <div class="dpage-hero">
+    <div class="dpage-hero-inner">
+
+      <a href="{% url 'all_hospitals' %}" class="dpage-back">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        All Hospitals
+      </a>
+
+      <div class="dpage-hero-row">
+        <div style="flex:1;min-width:0;">
+          <div class="dpage-badges">
+            <span class="dpage-badge-type">{{ hospital_type_label }}</span>
+            {% if hospital.rating %}
+            <div class="dpage-badge-rating">
+              <div class="stars">
+                {% for i in rating_range %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                {% endfor %}
+              </div>
+              <span>{{ hospital.rating }}</span>
+            </div>
+            {% endif %}
+          </div>
+          <h1 class="dpage-name"><strong>{{ hospital.name }}</strong></h1>
+          <p class="dpage-address">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            {{ hospital.address }}
+          </p>
+        </div>
+
+        <div class="dpage-hero-actions">
+          {% if map_url %}
+          <a href="{{ map_url }}" target="_blank" class="dpage-btn-dir">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 11 22 2 13 21 11 13 3 11" />
+            </svg>
+            Get Directions
+          </a>
+          {% endif %}
+          <button class="dpage-btn-share"
+            onclick="navigator.share ? navigator.share({title:'{{ hospital.name }}', url: window.location.href}) : navigator.clipboard.writeText(window.location.href)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+            Share
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="dpage-body">
+    <div class="dpage-grid">
+
+      <!-- ── LEFT COLUMN ── -->
+      <div>
+
+        <!-- Specialities -->
+        <div class="sec-card">
+          <div class="sec-header">
+            <div class="sec-icon sky">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="M9 12l2 2 4-4" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="sec-title">Medical Specialities</h3>
+              <p class="sec-sub">Available departments and services</p>
+            </div>
+          </div>
+
+          {% if hospital.specialities %}
+          <div class="spec-grid">
+            {% for spec in hospital.specialities %}
+            <div class="spec-item">
+              <span class="spec-dot"></span>
+              <span>{{ spec }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <p>No specific specialities listed.</p>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Facilities & Equipment -->
+        <div class="sec-card">
+          <div class="sec-header">
+            <div class="sec-icon purple">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M3 9h18M9 21V9" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="sec-title">Facilities &amp; Equipment</h3>
+              <p class="sec-sub">Available infrastructure and services</p>
+            </div>
+          </div>
+
+          <span class="sec-label">Bed Capacity</span>
+          <div class="bed-grid">
+            <div class="bed-box blue">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 16h20M6 8v8" />
+              </svg>
+              <div class="bed-val">{{ hospital.total_beds }}</div>
+              <div class="bed-lbl">Total Beds</div>
+            </div>
+            <div class="bed-box red">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+              <div class="bed-val">{{ hospital.icu_beds }}</div>
+              <div class="bed-lbl">ICU Beds</div>
+            </div>
+            <div class="bed-box orange">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13" rx="1" />
+                <path d="M16 8h4l3 3v5h-7V8z" />
+                <circle cx="5.5" cy="18.5" r="2.5" />
+                <circle cx="18.5" cy="18.5" r="2.5" />
+              </svg>
+              <div class="bed-val">{{ hospital.emergency_beds }}</div>
+              <div class="bed-lbl">Emergency</div>
+            </div>
+          </div>
+
+          <span class="sec-label" style="margin-top:8px;">Diagnostic Equipment</span>
+          <div class="facility-grid" style="margin-bottom:16px;">
+            <div class="facility-item {% if facilities.xray %}on{% else %}off{% endif %}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{% if facilities.xray %}
+                <polyline points="20 6 9 17 4 12" />{% else %}
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
+              </svg>
+              X-Ray
+            </div>
+            <div class="facility-item {% if facilities.mri %}on{% else %}off{% endif %}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{% if facilities.mri %}
+                <polyline points="20 6 9 17 4 12" />{% else %}
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
+              </svg>
+              MRI
+            </div>
+            <div class="facility-item {% if facilities.ct_scan %}on{% else %}off{% endif %}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{% if facilities.ct_scan %}
+                <polyline points="20 6 9 17 4 12" />{% else %}
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
+              </svg>
+              CT Scan
+            </div>
+            <div class="facility-item {% if facilities.ultrasound %}on{% else %}off{% endif %}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{% if facilities.ultrasound %}
+                <polyline points="20 6 9 17 4 12" />{% else %}
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
+              </svg>
+              Ultrasound
+            </div>
+          </div>
+
+          <span class="sec-label">Services</span>
+          <div class="facility-grid">
+            <div class="facility-item {% if facilities.blood_bank %}on{% else %}off{% endif %}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{% if facilities.blood_bank %}
+                <polyline points="20 6 9 17 4 12" />{% else %}
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
+              </svg>
+              Blood Bank
+            </div>
+            <div class="facility-item {% if facilities.laboratory %}on{% else %}off{% endif %}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{% if facilities.laboratory %}
+                <polyline points="20 6 9 17 4 12" />{% else %}
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
+              </svg>
+              Laboratory
+            </div>
+            <div class="facility-item {% if facilities.pharmacy %}on{% else %}off{% endif %}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{% if facilities.pharmacy %}
+                <polyline points="20 6 9 17 4 12" />{% else %}
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
+              </svg>
+              Pharmacy
+            </div>
+            <div class="facility-item {% if facilities.ambulance %}on{% else %}off{% endif %}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">{% if facilities.ambulance %}
+                <polyline points="20 6 9 17 4 12" />{% else %}
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
+              </svg>
+              Ambulance
+            </div>
+          </div>
+
+          {% if facilities.operation_theaters %}
+          <div class="ot-row">
+            <div class="ot-left">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+              <span>Operation Theaters</span>
+            </div>
+            <span class="ot-val">{{ facilities.operation_theaters }}</span>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Medical Team -->
+        <div class="sec-card">
+          <div class="sec-header">
+            <div class="sec-icon teal">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="sec-title">Medical Team</h3>
+              <p class="sec-sub">Our experienced doctors and specialists</p>
+            </div>
+          </div>
+
+          {% if doctors %}
+          {% for doctor in doctors %}
+          <div class="doctor-card">
+            <div class="doctor-avatar">{{ doctor.name|slice:":1" }}</div>
+            <div class="doctor-info">
+              <div class="doctor-name-row">
+                <span class="doctor-name">Dr. {{ doctor.name }}</span>
+                {% if doctor.is_head_doctor %}
+                <span class="doctor-head">Head</span>
+                {% endif %}
+              </div>
+              <div class="doctor-spec">{{ doctor.specialization }}</div>
+              <div class="doctor-quals">
+                {% for qual in doctor.qualification|split:", " %}
+                <span class="qual-tag">{{ qual }}</span>
+                {% endfor %}
+              </div>
+              <div class="doctor-meta">
+                <div class="doctor-meta-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                  </svg>
+                  {{ doctor.experience_years }} yrs
+                </div>
+                <div class="doctor-meta-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  {{ doctor.consultation_days }}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+              <line x1="16" y1="3" x2="22" y2="9" />
+            </svg>
+            <p>No doctor information available at this time.</p>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Insurance & Schemes -->
+        <div class="sec-card">
+          <div class="sec-header">
+            <div class="sec-icon green">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <polyline points="9 12 11 14 15 10" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="sec-title">Accepted Insurance &amp; Schemes</h3>
+              <p class="sec-sub">Payment methods and coverage</p>
+            </div>
+          </div>
+
+          {% if hospital.acceptedSchemes %}
+          <div class="scheme-tags">
+            {% for scheme in hospital.acceptedSchemes %}
+            {% with url=scheme.schemeName|scheme_url %}
+            {% if url %}
+            <a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="scheme-tag scheme-tag-link"
+              title="Visit official {{ scheme.schemeName }} website">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              {{ scheme.schemeName }}
+              <svg class="scheme-ext-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
             </a>
-
-            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
-                <!-- Hospital Info -->
-                <div class="flex-1">
-                    <!-- Badges -->
-                    <div class="flex flex-wrap items-center gap-3 mb-4">
-                        <span
-                            class="px-4 py-1.5 bg-white/25 backdrop-blur-md text-white rounded-full text-xs font-bold uppercase tracking-wider border border-white/20 shadow-lg">
-                            {{ hospital_type_label }}
-                        </span>
-                        {% if hospital.rating %}
-                        <div
-                            class="flex items-center gap-2 bg-gradient-to-r from-yellow-400/30 to-amber-400/30 backdrop-blur-md px-4 py-1.5 rounded-full border border-yellow-300/40 text-white shadow-lg">
-                            <div class="flex gap-0.5">
-                                {% for i in rating_range %}
-                                <i data-lucide="star" class="w-4 h-4 text-yellow-200 fill-current"></i>
-                                {% endfor %}
-                            </div>
-                            <span class="text-sm font-bold">{{ hospital.rating }}</span>
-                        </div>
-                        {% endif %}
-                    </div>
-
-                    <!-- Hospital Name -->
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
-                        {{ hospital.name }}
-                    </h1>
-
-                    <!-- Address -->
-                    <div class="flex items-start gap-3 text-blue-50 text-base md:text-lg">
-                        <i data-lucide="map-pin" class="w-6 h-6 shrink-0 mt-0.5"></i>
-                        <span class="leading-relaxed">{{ hospital.address }}</span>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex flex-wrap gap-3">
-                    {% if map_url %}
-                    <a href="{{ map_url }}" target="_blank"
-                        class="inline-flex items-center gap-2 bg-white text-blue-600 font-bold py-3.5 px-7 rounded-xl hover:bg-blue-50 hover:shadow-2xl hover:scale-105 transition-all shadow-xl">
-                        <i data-lucide="map" class="w-5 h-5"></i>
-                        Get Directions
-                    </a>
-                    {% endif %}
-                    <button
-                        class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md text-white font-bold py-3.5 px-7 rounded-xl hover:bg-white/30 transition-all border border-white/30 shadow-lg hover:shadow-xl hover:scale-105">
-                        <i data-lucide="share-2" class="w-5 h-5"></i>
-                        Share
-                    </button>
-                </div>
-            </div>
+            {% else %}
+            <span class="scheme-tag">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              {{ scheme.schemeName }}
+            </span>
+            {% endif %}
+            {% endwith %}
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+            <p>Contact hospital directly for insurance and scheme details.</p>
+          </div>
+          {% endif %}
         </div>
-    </div>
 
-    <!-- Main Content with Elevated Cards -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column: Primary Information -->
-            <div class="lg:col-span-2 space-y-8">
+      </div>
 
-                <!-- Medical Specialities Card -->
-                <div
-                    class="bg-white rounded-3xl p-8 lg:p-10 shadow-2xl shadow-blue-100/50 border border-slate-100/50 hover:shadow-blue-200/60 transition-all duration-300">
-                    <div class="flex items-center gap-4 mb-8">
-                        <div
-                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-                            <i data-lucide="stethoscope" class="w-7 h-7"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-slate-900">Medical Specialities</h3>
-                            <p class="text-sm text-slate-500">Available departments and services</p>
-                        </div>
-                    </div>
+      <!-- ── RIGHT COLUMN ── -->
+      <div class="sidebar-wrap">
 
-                    {% if hospital.specialities %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {% for spec in hospital.specialities %}
-                        <div
-                            class="group flex items-center gap-4 p-5 bg-gradient-to-br from-slate-50 to-blue-50/30 rounded-2xl border border-slate-200/50 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer">
-                            <div
-                                class="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:scale-125 group-hover:shadow-lg group-hover:shadow-blue-400/50 transition-all">
-                            </div>
-                            <span
-                                class="font-bold text-slate-700 group-hover:text-blue-700 transition-colors text-base">
-                                {{ spec }}
-                            </span>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <div class="p-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 text-center">
-                        <i data-lucide="info" class="w-8 h-8 text-slate-400 mx-auto mb-2"></i>
-                        <p class="text-slate-500 font-medium">No specific specialities listed.</p>
-                    </div>
-                    {% endif %}
-                </div>
+        <!-- Contact Card -->
+        <div class="contact-card">
+          <div class="contact-header">
+            <span class="contact-header-label">Get in Touch</span>
+            <h4>Contact Information</h4>
+          </div>
+          <div class="contact-body">
 
-                <!-- Insurance & Schemes Card -->
-                <div
-                    class="bg-white rounded-3xl p-8 lg:p-10 shadow-2xl shadow-green-100/50 border border-slate-100/50 hover:shadow-green-200/60 transition-all duration-300">
-                    <div class="flex items-center gap-4 mb-8">
-                        <div
-                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-white shadow-lg shadow-green-500/30">
-                            <i data-lucide="shield-check" class="w-7 h-7"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-slate-900">Accepted Insurance & Schemes</h3>
-                            <p class="text-sm text-slate-500">Payment methods and coverage</p>
-                        </div>
-                    </div>
+            {% if hospital.contact %}
+            <a href="tel:{{ hospital.contact }}" class="contact-btn phone">
+              <div class="contact-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </div>
+              <div>
+                <span class="contact-lbl">Emergency Line</span>
+                <span class="contact-num">{{ hospital.contact }}</span>
+              </div>
+            </a>
+            {% endif %}
 
-                    {% if hospital.acceptedSchemes %}
-                    <div class="flex flex-wrap gap-3">
-                        {% for scheme in hospital.acceptedSchemes %}
-                        <span
-                            class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-br from-emerald-50 to-green-50 text-green-700 font-bold border border-green-200/50 hover:shadow-lg hover:shadow-green-100/50 hover:scale-105 transition-all cursor-pointer">
-                            <i data-lucide="check-circle-2" class="w-5 h-5 text-green-600"></i>
-                            {{ scheme.schemeName }}
-                        </span>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <div
-                        class="p-8 bg-gradient-to-br from-slate-50 to-green-50/20 rounded-2xl border-2 border-dashed border-slate-300 text-center">
-                        <i data-lucide="phone" class="w-8 h-8 text-slate-400 mx-auto mb-3"></i>
-                        <p class="text-slate-600 font-semibold mb-1">Insurance Information</p>
-                        <p class="text-slate-500 text-sm">Contact hospital directly for insurance details.</p>
-                    </div>
-                    {% endif %}
-                </div>
+            {% if facilities.ambulance and hospital.ambulance_contact %}
+            <a href="tel:{{ hospital.ambulance_contact }}" class="contact-btn ambulance">
+              <div class="contact-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13" rx="1" />
+                  <path d="M16 8h4l3 3v5h-7V8z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" />
+                  <path d="M5 9h4M7 7v4" />
+                </svg>
+              </div>
+              <div>
+                <span class="contact-lbl">Ambulance Service</span>
+                <span class="contact-num">{{ hospital.ambulance_contact }}</span>
+              </div>
+            </a>
+            {% endif %}
 
+            <div class="address-row">
+              <div class="address-row-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div>
+                <span class="address-label">Full Address</span>
+                <p class="address-text">{{ hospital.address }}</p>
+                <span class="address-city">{{ hospital.city }} — {{ hospital.pincode }}</span>
+              </div>
             </div>
 
-            <!-- Right Column: Contact & Actions -->
-            <div class="lg:col-span-1 space-y-6">
-
-                <!-- Contact Information Card -->
-                <div
-                    class="bg-white rounded-3xl p-7 shadow-2xl shadow-slate-200/50 border border-slate-100/50 hover:shadow-slate-300/60 transition-all duration-300 sticky top-6">
-                    <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                        <i data-lucide="phone-call" class="w-5 h-5 text-blue-600"></i>
-                        Contact Information
-                    </h3>
-
-                    <div class="space-y-5">
-                        {% if hospital.contact %}
-                        <a href="tel:{{ hospital.contact }}"
-                            class="group flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-600/40 hover:scale-105">
-                            <div
-                                class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                                <i data-lucide="phone" class="w-6 h-6"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs font-bold text-blue-100 uppercase tracking-wider">Emergency Line</p>
-                                <p class="text-xl font-extrabold text-white">{{ hospital.contact }}</p>
-                            </div>
-                        </a>
-                        {% endif %}
-
-                        <div class="flex items-start gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-200/50">
-                            <div class="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center shrink-0">
-                                <i data-lucide="map-pin" class="w-5 h-5 text-slate-600"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-900 mb-2">Full Address</p>
-                                <p class="text-sm text-slate-600 leading-relaxed mb-2">{{ hospital.address }}</p>
-                                <p class="text-sm text-slate-700 font-semibold">{{ hospital.city }} - {{
-                                    hospital.pincode }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AI Symptom Checker CTA -->
-                <div
-                    class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-7 text-white shadow-2xl shadow-slate-900/30 border border-slate-700/50 relative overflow-hidden">
-                    <!-- Decorative Elements -->
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
-                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
-
-                    <div class="relative z-10">
-                        <div
-                            class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
-                            <i data-lucide="activity" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Need a Checkup?</h3>
-                        <p class="text-slate-300 text-sm mb-6 leading-relaxed">
-                            Use our AI-powered Symptom Checker to get a preliminary health analysis before your visit.
-                        </p>
-                        <a href="{% url 'index' %}"
-                            class="block w-full text-center bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-900/50 hover:shadow-xl hover:shadow-blue-900/70 hover:scale-105">
-                            Check Symptoms Now
-                        </a>
-                    </div>
-                </div>
-
-            </div>
+          </div>
         </div>
+
+        <!-- CTA Card -->
+        <div class="cta-card">
+          <div class="cta-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+          </div>
+          <h3>Need a Checkup?</h3>
+          <p>Use our AI-powered symptom checker to get a preliminary health analysis before your visit.</p>
+          <a href="{% url 'index' %}" class="cta-btn">Check Symptoms Now</a>
+        </div>
+
+      </div>
+
     </div>
+  </div>
+
 </div>
 {% endblock %}

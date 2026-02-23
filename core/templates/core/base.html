@@ -3,56 +3,527 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareNavigator - AI Powered Healthcare Assistant</title>
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareNavigator — AI Healthcare Assistant</title>
+  <link href="{% static 'css/output.css' %}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sky: #38bdf8;
+      --sky-dim: rgba(56,189,248,0.12);
+      --ink: #0f0f0f;
+      --ink-2: #1c1c1a;
+      --muted: #6b7280;
+      --muted-2: #9ca3af;
+      --border: #e5e5e3;
+      --surface: #fafaf9;
+      --white: #ffffff;
+      --red: #dc2626;
+      --red-soft: #fee2e2;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f7f7f5;
+      color: var(--ink-2);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ─────────────────────────────────── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    /* Logo */
+    .logo-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      background: var(--ink);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.15s;
+    }
+    .logo-link:hover .logo-mark { transform: scale(1.05); }
+    .logo-mark svg { width: 16px; height: 16px; color: var(--sky); }
+    .logo-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+    }
+    .logo-name span {
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    /* Nav */
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .nav-link:hover {
+      background: var(--surface);
+      color: var(--ink);
+    }
+    .nav-link.active {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    /* ── MAIN ────────────────────────────────────── */
+    main { flex: 1; }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    .site-footer {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 40px 32px;
+      margin-top: 80px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--ink);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer-mark svg { width: 13px; height: 13px; color: var(--sky); }
+    .footer-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .footer-disclaimer {
+      font-size: 14px;
+      color: var(--muted-2);
+      text-align: center;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+    .footer-disclaimer strong { color: var(--muted); font-weight: 500; }
+    .footer-mono {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: #9a9da1;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── EMERGENCY BUTTON ────────────────────────── */
+    .emergency-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+    }
+    .emergency-trigger {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 17px 23px;
+      background: var(--ink);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+      letter-spacing: -0.01em;
+    }
+    .emergency-trigger:hover {
+      background: #1f1f1f;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.24);
+    }
+    .emergency-trigger:active { transform: translateY(0); }
+    .emergency-trigger svg { width: 15px; height: 15px; color: #f87171; }
+    .emergency-trigger .label { display: inline; }
+
+    /* Ping dot */
+    .e-ping {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 10px;
+      height: 10px;
+    }
+    .e-ping::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: e-ping-anim 1.8s ease-in-out infinite;
+    }
+    .e-ping::after {
+      content: '';
+      position: absolute;
+      inset: 1px;
+      background: #ef4444;
+      border-radius: 50%;
+    }
+    @keyframes e-ping-anim {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(2); opacity: 0; }
+    }
+
+    /* ── MODAL ───────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,15,15,0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 20px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+      border: 1px solid var(--border);
+      animation: modal-in 0.2s ease;
+    }
+    @keyframes modal-in {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 24px 20px;
+      border-bottom: 1px solid #f3f3f1;
+    }
+    .modal-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .modal-icon {
+      width: 40px;
+      height: 40px;
+      background: #fff5f5;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-icon svg { width: 18px; height: 18px; color: var(--red); }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--muted-2);
+      transition: background 0.15s, color 0.15s;
+    }
+    .modal-close:hover { background: var(--surface); color: var(--ink); }
+    .modal-close svg { width: 14px; height: 14px; }
+
+    .modal-body { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 10px; }
+
+    .emergency-card {
+      display: block;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid;
+      text-decoration: none;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    }
+    .emergency-card:hover { transform: translateY(-1px); }
+    .emergency-card:active { transform: translateY(0); }
+
+    .emergency-card.red {
+      background: #fff5f5;
+      border-color: #fecaca;
+    }
+    .emergency-card.red:hover {
+      background: #fef2f2;
+      border-color: #f87171;
+    }
+    .emergency-card.blue {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+    .emergency-card.blue:hover {
+      background: #e0f2fe;
+      border-color: #7dd3fc;
+    }
+
+    .ec-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+    .emergency-card.red .ec-label { color: #f87171; }
+    .emergency-card.blue .ec-label { color: #38bdf8; }
+
+    .ec-number-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .ec-num-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .emergency-card.red .ec-num-icon { background: #dc2626; }
+    .emergency-card.blue .ec-num-icon { background: #0ea5e9; }
+    .ec-num-icon svg { width: 16px; height: 16px; color: #fff; }
+    .ec-number {
+      font-family: 'DM Mono', monospace;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .emergency-card.red .ec-number { color: #991b1b; }
+    .emergency-card.blue .ec-number { color: #075985; }
+
+    .modal-note {
+      display: flex;
+      gap: 8px;
+      padding: 12px 14px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      margin-top: 2px;
+    }
+    .modal-note svg { width: 13px; height: 13px; color: #d97706; flex-shrink: 0; margin-top: 1px; }
+    .modal-note p {
+      font-size: 11px;
+      color: #92400e;
+      line-height: 1.6;
+    }
+    .modal-note strong { font-weight: 600; }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 640px) {
+      .header-inner { padding: 0 20px; }
+      .nav-link .nav-label { display: none; }
+      .emergency-trigger .label { display: none; }
+      .emergency-trigger { padding: 12px 14px; }
+      .site-footer { padding: 32px 20px; }
+    }
+  </style>
+  {% block extra_css %}{% endblock %}
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-slate-50">
+<body>
 
-    <!-- Header -->
-    <header class="sticky top-0 z-50 bg-gradient-to-br from-[#eaf6ff]/80 via-[#f4fbff]/80 to-white/80 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 md:py-4 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <a href="{% url 'index' %}" class="flex items-center gap-2">
-                    <h1 class="text-xl md:text-2xl font-bold text-slate-900">CareNavigator</h1>
-                </a>
-            </div>
+  <!-- ── HEADER ── -->
+  <header class="site-header">
+    <div class="header-inner">
 
-            <nav class="flex items-center gap-6">
-                <a href="{% url 'index' %}"
-                    class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Home</a>
-                <a href="{% url 'all_hospitals' %}"
-                    class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">All Hospitals</a>
-            </nav>
+      <a href="{% url 'index' %}" class="logo-link">
+        <div class="logo-mark">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
-    </header>
+        <span class="logo-name">Care<span>Navigator</span></span>
+      </a>
 
+      <nav class="site-nav">
+        <a href="{% url 'index' %}" class="nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span class="nav-label">Home</span>
+        </a>
+        <a href="{% url 'all_hospitals' %}" class="nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <span class="nav-label">Hospitals</span>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ── PAGE CONTENT ── -->
+  <main>
     {% block content %}{% endblock %}
+  </main>
 
-    <!-- Footer -->
-    <footer class="bg-blue-100/50 text-slate-700 mt-20 py-8">
-        <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-sm">
-                <strong>Disclaimer:</strong> AI-generated results for informational purposes only. Always consult
-                medical professionals for emergencies.
-            </p>
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-mark">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
-    </footer>
+        <span class="footer-name">CareNavigator</span>
+      </div>
+      <p class="footer-disclaimer">
+        <strong>Disclaimer:</strong> AI-generated results are for informational purposes only.
+        Always consult a medical professional for emergencies and health decisions.
+      </p>
+      <span class="footer-mono">© {% now "Y" %} CareNavigator</span>
+    </div>
+  </footer>
 
-    <script src="{% static 'js/app.js' %}"></script>
-    <script>
-        lucide.createIcons();
-    </script>
+  <!-- ── EMERGENCY FAB ── -->
+  <div class="emergency-fab">
+    <button class="emergency-trigger" id="emergencyBtn" aria-label="Emergency services">
+      <span class="e-ping"></span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M5 9h4M7 7v4"/></svg>
+      <span class="label">Emergency</span>
+    </button>
+  </div>
+
+  <!-- ── EMERGENCY MODAL ── -->
+  <div class="modal-overlay" id="emergencyModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M5 9h4M7 7v4"/></svg>
+          </div>
+          <span class="modal-title" id="modalTitle">Emergency Services</span>
+        </div>
+        <button class="modal-close" id="closeModal" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <a href="tel:108" class="emergency-card red">
+          <div class="ec-label">National Emergency Ambulance</div>
+          <div class="ec-number-row">
+            <div class="ec-num-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <span class="ec-number">108</span>
+          </div>
+        </a>
+
+        <a href="tel:100" class="emergency-card blue">
+          <div class="ec-label">Police Emergency</div>
+          <div class="ec-number-row">
+            <div class="ec-num-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <span class="ec-number">100</span>
+          </div>
+        </a>
+
+        <div class="modal-note">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p>For life-threatening emergencies, call <strong>108</strong> immediately. You can also contact hospitals directly for ambulance services.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/app.js' %}"></script>
+  <script>
+    const emergencyBtn = document.getElementById('emergencyBtn');
+    const modal = document.getElementById('emergencyModal');
+    const closeBtn = document.getElementById('closeModal');
+
+    emergencyBtn.addEventListener('click', () => modal.classList.add('open'));
+    closeBtn.addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') modal.classList.remove('open');
+    });
+  </script>
 </body>
-
 </html>

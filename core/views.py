@@ -72,6 +72,7 @@ def search_hospitals(request):
             
             enriched = {
                 'name': h.name,
+                'id': h.id,
                 'address': h.address,
                 'city': h.city,
                 'rating': h.rating,
@@ -82,7 +83,6 @@ def search_hospitals(request):
                 'computed_cost': { 'low': cost_data['low'], 'high': cost_data['high'] },
                 'cost_text': format_cost_text(cost_data['low'], cost_data['high'])
             }
-            
             enriched_hospitals.append(enriched)
             
         # Budget filter
@@ -127,6 +127,16 @@ def all_hospitals(request):
         # Enrich hospitals for template
         enriched_hospitals = []
         for h in hospitals:
+            # Get facility highlights
+            facilities = h.facilities or {}
+            key_equipment = []
+            if facilities.get('xray'):
+                key_equipment.append('X-Ray')
+            if facilities.get('mri'):
+                key_equipment.append('MRI')
+            if facilities.get('ct_scan'):
+                key_equipment.append('CT Scan')
+            
             enriched_hospitals.append({
                 'id': h.id,
                 'name': h.name,
@@ -140,8 +150,14 @@ def all_hospitals(request):
                 'lng': h.lng,
                 'map_url': f"https://www.google.com/maps?q={h.lat},{h.lng}" if h.lat and h.lng else None,
                 'specialities': h.specialities[:3], # Show first 3
-                'more_specialities_count': len(h.specialities) - 3 if len(h.specialities) > 3 else 0
+                'more_specialities_count': len(h.specialities) - 3 if len(h.specialities) > 3 else 0,
+                'total_beds': h.total_beds,
+                'key_equipment': key_equipment,
+                'doctor_count': h.doctors.count(),
+                'has_ambulance': facilities.get('ambulance', False),
+                'ambulance_contact': h.ambulance_contact
             })
+
 
         context = {
             'hospitals': enriched_hospitals,
@@ -161,11 +177,16 @@ def all_hospitals(request):
 def hospital_detail(request, pk):
     hospital = get_object_or_404(Hospital, pk=pk)
     
+    # Get all doctors for this hospital
+    doctors = hospital.doctors.all()
+    
     # Context data similar to what's used in cards, but more detailed if available
     context = {
         'hospital': hospital,
         'rating_range': range(int(hospital.rating)) if hospital.rating else [],
         'map_url': f"https://www.google.com/maps?q={hospital.lat},{hospital.lng}" if hospital.lat and hospital.lng else None,
         'hospital_type_label': hospital.get_hospital_type_display(),
+        'doctors': doctors,
+        'facilities': hospital.facilities or {},
     }
     return render(request, 'core/hospital_detail.html', context)

@@ -1,94 +1,464 @@
-<!-- MAIN FORM SECTION -->
-<main id="main-form" class="max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-12">
-    <div class="max-w-xl mx-auto mb-12 md:mb-20 relative">
-        <div
-            class="absolute -inset-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 rounded-2xl md:rounded-3xl blur opacity-20 md:opacity-0">
+<style>
+  /* ── MAIN FORM SECTION ───────────────────────────────────────────────── */
+  #main-form {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 64px 32px 80px;
+  }
+
+  /* ── FORM CARD ── */
+  .form-wrap {
+    max-width: 520px;
+    margin: 0 auto 80px;
+  }
+
+  .form-card {
+    background: #ffffff;
+    border: 1px solid #e9e9e7;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s;
+  }
+  .form-card:focus-within {
+    box-shadow: 0 8px 40px rgba(56,189,248,0.1), 0 4px 16px rgba(0,0,0,0.06);
+    border-color: rgba(56,189,248,0.2);
+  }
+
+  /* Card header */
+  .form-header {
+    background: #0f0f0f;
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .form-header::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .form-header-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #38bdf8;
+    margin-bottom: 10px;
+  }
+  .form-header-dot {
+    width: 5px;
+    height: 5px;
+    background: #38bdf8;
+    border-radius: 50%;
+    animation: fh-pulse 2s ease-in-out infinite;
+  }
+  @keyframes fh-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+  .form-header h3 {
+    font-size: 20px;
+    font-weight: 300;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    margin: 0 0 4px;
+    line-height: 1.2;
+    position: relative;
+  }
+  .form-header h3 strong { font-weight: 600; color: #38bdf8; }
+  .form-header p {
+    font-size: 14px;
+    color: #969eac;
+    margin: 0;
+    position: relative;
+  }
+
+  /* Card body */
+  .form-body {
+    padding: 28px 32px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Error */
+  .form-error {
+    display: none;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 14px;
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #991b1b;
+  }
+  .form-error.visible { display: flex; }
+  .form-error svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; color: #f87171; }
+
+  /* Field */
+  .form-field label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #7c7c7b;
+    margin-bottom: 8px;
+  }
+
+  .form-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: #fafaf9;
+    border: 1px solid #e5e5e3;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1c1c1a;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  .form-textarea::placeholder { color: #99a2ac; }
+  .form-textarea:focus {
+    border-color: #38bdf8;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+  }
+
+  /* Select wrap */
+  .select-wrap {
+    position: relative;
+  }
+  .select-wrap svg.select-left {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    color: #9ca3af;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .select-wrap svg.select-right {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 13px;
+    height: 13px;
+    color: #9ca3af;
+    pointer-events: none;
+  }
+  .form-select {
+    width: 100%;
+    padding: 13px 40px 13px 40px;
+    background: #fafaf9;
+    border: 1px solid #e5e5e3;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1c1c1a;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  .form-select:focus {
+    border-color: #38bdf8;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+  }
+
+  /* Submit button */
+  .form-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 20px;
+    background: #0f0f0f;
+    border: 1px solid #0f0f0f;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+    letter-spacing: -0.01em;
+  }
+  .form-submit:hover {
+    background: #1f1f1f;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+  .form-submit:active { transform: translateY(0); box-shadow: none; }
+  .form-submit:disabled {
+    background: #e5e5e3;
+    border-color: #e5e5e3;
+    color: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  .form-submit svg { width: 15px; height: 15px; flex-shrink: 0; }
+  .form-submit .chevron { transition: transform 0.15s; }
+  .form-submit:hover .chevron { transform: translateX(3px); }
+
+  /* Loader spinner */
+  .btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── HOW IT WORKS ── */
+  .hiw-section { margin-top: 0; }
+
+  .hiw-heading {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .hiw-heading-label {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #81817e;
+    margin-bottom: 12px;
+  }
+  .hiw-heading h3 {
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 300;
+    color: #1c1c1a;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+  .hiw-heading h3 strong { font-weight: 600; }
+
+  .hiw-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  @media (min-width: 600px)  { .hiw-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 860px)  { .hiw-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .hiw-card {
+    background: #ffffff;
+    border: 1px solid #e9e9e7;
+    border-radius: 16px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .hiw-card::before {
+    content: attr(data-step);
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #9b9b99;
+    letter-spacing: 0.04em;
+  }
+  .hiw-card:hover {
+    border-color: #38bdf8;
+    box-shadow: 0 6px 28px rgba(56,189,248,0.09);
+    transform: translateY(-2px);
+  }
+
+  .hiw-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid transparent;
+  }
+  .hiw-icon svg { width: 20px; height: 20px; }
+
+  .hiw-icon.sky   { background: #f0f9ff; border-color: #bae6fd; }
+  .hiw-icon.sky   svg { color: #0ea5e9; }
+  .hiw-icon.green { background: #f0fdf4; border-color: #bbf7d0; }
+  .hiw-icon.green svg { color: #16a34a; }
+  .hiw-icon.purple{ background: #faf5ff; border-color: #e9d5ff; }
+  .hiw-icon.purple svg { color: #9333ea; }
+
+  .hiw-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f0f0f;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .hiw-card p {
+    font-size: 14px;
+    color: #828a97;
+    line-height: 1.6;
+    font-weight: 300;
+    margin: 0;
+  }
+
+  /* Connector line between cards (desktop) */
+  @media (min-width: 860px) {
+    .hiw-grid { position: relative; }
+    .hiw-card:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 50px;
+      right: -7px;
+      width: 13px;
+      height: 1px;
+      background: #e5e5e3;
+      z-index: 1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    #main-form { padding: 40px 20px 60px; }
+    .form-header, .form-body { padding-left: 24px; padding-right: 24px; }
+    .hiw-card:last-child { grid-column: 1 / -1; }
+  }
+</style>
+
+<!-- ── MAIN FORM SECTION ───────────────────────────────────────────────── -->
+<main id="main-form">
+
+  <!-- ── SYMPTOM FORM ── -->
+  <div class="form-wrap">
+    <div class="form-card">
+
+      <!-- Header -->
+      <div class="form-header">
+        <div class="form-header-label">
+          <span class="form-header-dot"></span>
+          AI Analysis
+        </div>
+        <h3>Start your <strong>health journey</strong></h3>
+        <p>Tell us what you're experiencing</p>
+      </div>
+
+      <!-- Body -->
+      <div class="form-body">
+
+        <!-- Error -->
+        <div id="error-message" class="form-error">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span></span>
         </div>
 
-        <div
-            class="relative bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-blue-200/30 border border-slate-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-500 to-blue-400 px-6 md:px-8 py-5 md:py-6">
-                <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Start Your Health Journey</h3>
-                <p class="text-sm md:text-base text-blue-50">Tell us what you're experiencing</p>
-            </div>
-
-            <div class="p-6 md:p-8 space-y-5 md:space-y-6">
-                <div id="error-message"
-                    class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-900 mb-2">Describe Your Symptoms</label>
-                    <textarea id="symptoms-input"
-                        placeholder="E.g., I have had a severe high fever for 3 days with joint pain and nausea..."
-                        class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none text-slate-700 placeholder-slate-400 text-sm md:text-base"
-                        rows="4"></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-slate-900 mb-2">Your Location</label>
-                    <div class="relative">
-                        <i data-lucide="map-pin"
-                            class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none"></i>
-                        <select id="city-input"
-                            class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all text-slate-700 text-sm md:text-base appearance-none bg-white cursor-pointer">
-                            <option value="Ahmedabad">Ahmedabad</option>
-                            <option value="Gandhinagar">Gandhinagar</option>
-                        </select>
-                        <i data-lucide="chevron-right"
-                            class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none rotate-90"></i>
-                    </div>
-                </div>
-
-                <button id="analyze-btn"
-                    class="w-full bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-semibold py-3.5 rounded-lg hover:from-blue-600 hover:to-cyan-500 disabled:from-slate-300 disabled:to-slate-400 disabled:cursor-not-allowed transition-all shadow-md shadow-blue-200 hover:shadow-lg flex items-center justify-center gap-2 group text-sm md:text-base">
-                    <span id="btn-text" class="flex items-center gap-2">
-                        <i data-lucide="search" class="w-5 h-5"></i>
-                        Analyze & Find Hospitals
-                        <i data-lucide="chevron-right"
-                            class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
-                    </span>
-                    <span id="btn-loader" class="hidden">
-                        <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin">
-                        </div>
-                        Analyzing...
-                    </span>
-                </button>
-            </div>
+        <!-- Symptoms -->
+        <div class="form-field">
+          <label>Describe your symptoms</label>
+          <textarea
+            id="symptoms-input"
+            class="form-textarea"
+            rows="4"
+            placeholder="E.g., I have had a severe high fever for 3 days with joint pain and nausea…"
+          ></textarea>
         </div>
+
+        <!-- Location -->
+        <div class="form-field">
+          <label>Your location</label>
+          <div class="select-wrap">
+            <svg class="select-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <select id="city-input" class="form-select">
+              <option value="Ahmedabad">Ahmedabad</option>
+              <option value="Gandhinagar">Gandhinagar</option>
+            </select>
+            <svg class="select-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button id="analyze-btn" class="form-submit">
+          <span id="btn-text" style="display:flex;align-items:center;gap:8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Analyze &amp; Find Hospitals
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+          <span id="btn-loader" style="display:none;align-items:center;gap:8px;">
+            <span class="btn-spinner"></span>
+            Analyzing…
+          </span>
+        </button>
+        <p class="warning-disclaimer">
+        <strong>Disclaimer:</strong> AI-generated results are for informational purposes only.
+        Always consult a medical professional for emergencies and health decisions.
+      </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <div class="hiw-section">
+    <div class="hiw-heading">
+      <span class="hiw-heading-label">Process</span>
+      <h3>How it <strong>works</strong></h3>
     </div>
 
-    <!-- How It Works (Static) -->
-    <div class="mt-16 md:mt-24 mb-8 md:mb-12">
-        <h3 class="text-2xl md:text-3xl font-bold text-center text-slate-900 mb-8 md:mb-12">How It Works</h3>
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
-            <div
-                class="bg-gradient-to-br from-blue-50 to-white rounded-xl md:rounded-2xl p-6 md:p-8 text-center shadow-lg border border-blue-100 hover:shadow-xl transition-shadow">
-                <div
-                    class="bg-gradient-to-br from-blue-500 to-blue-600 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mx-auto mb-3 md:mb-4 shadow-lg shadow-blue-500/30">
-                    <i data-lucide="stethoscope" class="w-6 h-6 text-white"></i>
-                </div>
-                <h4 class="text-base md:text-lg font-bold text-slate-900 mb-2">Input Symptoms</h4>
-                <p class="text-xs md:text-sm text-slate-600">Describe what you're feeling in plain English</p>
-            </div>
-            <div
-                class="bg-gradient-to-br from-cyan-50 to-white rounded-xl md:rounded-2xl p-6 md:p-8 text-center shadow-lg border border-cyan-100 hover:shadow-xl transition-shadow">
-                <div
-                    class="bg-gradient-to-br from-cyan-500 to-blue-500 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mx-auto mb-3 md:mb-4 shadow-lg shadow-cyan-500/30">
-                    <i data-lucide="trending-up" class="w-6 h-6 text-white"></i>
-                </div>
-                <h4 class="text-base md:text-lg font-bold text-slate-900 mb-2">AI Analysis</h4>
-                <p class="text-xs md:text-sm text-slate-600">Our AI identifies potential causes and specialist
-                    types.</p>
-            </div>
-            <div
-                class="bg-gradient-to-br from-blue-50 to-white rounded-xl md:rounded-2xl p-6 md:p-8 text-center shadow-lg border border-blue-100 hover:shadow-xl transition-shadow sm:col-span-2 md:col-span-1">
-                <div
-                    class="bg-gradient-to-br from-blue-400 to-cyan-500 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mx-auto mb-3 md:mb-4 shadow-lg shadow-blue-400/30">
-                    <i data-lucide="hospital" class="w-6 h-6 text-white"></i>
-                </div>
-                <h4 class="text-base md:text-lg font-bold text-slate-900 mb-2">Get Recommendations</h4>
-                <p class="text-xs md:text-sm text-slate-600">See nearby specialists and estimated costs</p>
-            </div>
+    <div class="hiw-grid">
+
+      <div class="hiw-card" data-step="01">
+        <div class="hiw-icon sky">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/><path d="M12 7v4M10 9h4"/></svg>
         </div>
+        <h4>Input Symptoms</h4>
+        <p>Describe what you're feeling in plain language — no medical jargon required.</p>
+      </div>
+
+      <div class="hiw-card" data-step="02">
+        <div class="hiw-icon purple">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h4>AI Analysis</h4>
+        <p>Our AI identifies potential causes and the right specialist type for your condition.</p>
+      </div>
+
+      <div class="hiw-card" data-step="03">
+        <div class="hiw-icon green">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <h4>Get Recommendations</h4>
+        <p>See nearby hospitals ranked by rating, with estimated treatment costs.</p>
+      </div>
+
     </div>
+  </div>
+
 </main>
