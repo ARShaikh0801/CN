@@ -1,3 +1,4 @@
+{% load i18n %}
 <style>
   /* ── HERO ───────────────────────────────────────────────────────────── */
   #hero-section {
@@ -16,8 +17,8 @@
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+      linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
     background-size: 48px 48px;
     pointer-events: none;
   }
@@ -29,16 +30,17 @@
     right: -80px;
     width: 480px;
     height: 480px;
-    background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 65%);
     pointer-events: none;
   }
+
   .hero-glow-2 {
     position: absolute;
     bottom: -100px;
     left: -60px;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.06) 0%, transparent 65%);
     pointer-events: none;
   }
 
@@ -57,13 +59,24 @@
     gap: 48px;
     align-items: center;
   }
+
   @media (min-width: 900px) {
-    .hero-grid { grid-template-columns: 1fr 1fr; gap: 64px; }
+    .hero-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
   }
 
   /* ── LEFT: TEXT ── */
-  .hero-text { text-align: center; }
-  @media (min-width: 900px) { .hero-text { text-align: left; } }
+  .hero-text {
+    text-align: center;
+  }
+
+  @media (min-width: 900px) {
+    .hero-text {
+      text-align: left;
+    }
+  }
 
   .hero-pill {
     display: inline-flex;
@@ -75,12 +88,13 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #38bdf8;
-    background: rgba(56,189,248,0.08);
-    border: 1px solid rgba(56,189,248,0.18);
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.18);
     padding: 6px 12px;
     border-radius: 20px;
     margin-bottom: 28px;
   }
+
   .hero-pill-dot {
     width: 5px;
     height: 5px;
@@ -88,9 +102,19 @@
     border-radius: 50%;
     animation: hero-pulse 2s ease-in-out infinite;
   }
+
   @keyframes hero-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.3; transform: scale(0.75); }
+
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.3;
+      transform: scale(0.75);
+    }
   }
 
   .hero-h1 {
@@ -101,6 +125,7 @@
     letter-spacing: -0.04em;
     margin: 0 0 20px;
   }
+
   .hero-h1 strong {
     font-weight: 600;
     color: #38bdf8;
@@ -114,7 +139,13 @@
     margin: 0 0 40px;
     max-width: 440px;
   }
-  @media (max-width: 900px) { .hero-sub { margin-left: auto; margin-right: auto; } }
+
+  @media (max-width: 900px) {
+    .hero-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 
   .hero-actions {
     display: flex;
@@ -123,7 +154,12 @@
     flex-wrap: wrap;
     justify-content: center;
   }
-  @media (min-width: 900px) { .hero-actions { justify-content: flex-start; } }
+
+  @media (min-width: 900px) {
+    .hero-actions {
+      justify-content: flex-start;
+    }
+  }
 
   .hero-btn-primary {
     display: inline-flex;
@@ -140,14 +176,19 @@
     text-decoration: none;
     cursor: pointer;
     transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 20px rgba(56,189,248,0.25);
+    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.25);
   }
+
   .hero-btn-primary:hover {
     background: #7dd3fc;
     transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(56,189,248,0.35);
+    box-shadow: 0 8px 28px rgba(56, 189, 248, 0.35);
   }
-  .hero-btn-primary svg { width: 15px; height: 15px; }
+
+  .hero-btn-primary svg {
+    width: 15px;
+    height: 15px;
+  }
 
   .hero-btn-secondary {
     display: inline-flex;
@@ -155,7 +196,7 @@
     gap: 8px;
     padding: 13px 22px;
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 11px;
     font-family: 'DM Sans', sans-serif;
     font-size: 14px;
@@ -165,12 +206,17 @@
     cursor: pointer;
     transition: border-color 0.15s, color 0.15s, background 0.15s;
   }
+
   .hero-btn-secondary:hover {
-    border-color: rgba(255,255,255,0.2);
+    border-color: rgba(255, 255, 255, 0.2);
     color: #ffffff;
-    background: rgba(255,255,255,0.04);
+    background: rgba(255, 255, 255, 0.04);
   }
-  .hero-btn-secondary svg { width: 15px; height: 15px; }
+
+  .hero-btn-secondary svg {
+    width: 15px;
+    height: 15px;
+  }
 
   /* Trust strip */
   .hero-trust {
@@ -181,7 +227,12 @@
     flex-wrap: wrap;
     justify-content: center;
   }
-  @media (min-width: 900px) { .hero-trust { justify-content: flex-start; } }
+
+  @media (min-width: 900px) {
+    .hero-trust {
+      justify-content: flex-start;
+    }
+  }
 
   .trust-item {
     display: flex;
@@ -190,7 +241,13 @@
     font-size: 14px;
     color: #898e95;
   }
-  .trust-item svg { width: 14px; height: 14px; color: #22c55e; }
+
+  .trust-item svg {
+    width: 14px;
+    height: 14px;
+    color: #22c55e;
+  }
+
   .trust-sep {
     width: 2px;
     height: 14px;
@@ -204,7 +261,12 @@
     align-items: center;
     position: relative;
   }
-  @media (min-width: 900px) { .hero-visual { display: flex; } }
+
+  @media (min-width: 900px) {
+    .hero-visual {
+      display: flex;
+    }
+  }
 
   .hero-orb-wrap {
     position: relative;
@@ -221,18 +283,23 @@
     width: 120px;
     height: 120px;
     background: #0f0f0f;
-    border: 1px solid rgba(56,189,248,0.25);
+    border: 1px solid rgba(56, 189, 248, 0.25);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow:
-      0 0 0 16px rgba(56,189,248,0.04),
-      0 0 0 32px rgba(56,189,248,0.02),
-      0 0 60px rgba(56,189,248,0.15);
+      0 0 0 16px rgba(56, 189, 248, 0.04),
+      0 0 0 32px rgba(56, 189, 248, 0.02),
+      0 0 60px rgba(56, 189, 248, 0.15);
     z-index: 10;
   }
-  .hero-orb-center svg { width: 40px; height: 40px; color: #38bdf8; }
+
+  .hero-orb-center svg {
+    width: 40px;
+    height: 40px;
+    color: #38bdf8;
+  }
 
   /* Ring */
   .hero-ring {
@@ -242,19 +309,26 @@
     transform: translate(-50%, -50%);
     width: 280px;
     height: 280px;
-    border: 1px solid rgba(56,189,248,0.08);
+    border: 1px solid rgba(56, 189, 248, 0.08);
     border-radius: 50%;
     animation: hero-rotate 24s linear infinite;
   }
+
   .hero-ring-2 {
     width: 340px;
     height: 340px;
-    border-color: rgba(56,189,248,0.04);
+    border-color: rgba(56, 189, 248, 0.04);
     animation: hero-rotate 36s linear infinite reverse;
   }
+
   @keyframes hero-rotate {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to   { transform: translate(-50%, -50%) rotate(360deg); }
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
   }
 
   /* Orbiting icon nodes */
@@ -263,44 +337,108 @@
     z-index: 5;
     animation: hero-float 3s ease-in-out infinite;
   }
-  .hero-node:nth-child(3) { animation-delay: 0s; }
-  .hero-node:nth-child(4) { animation-delay: 0.6s; }
-  .hero-node:nth-child(5) { animation-delay: 1.2s; }
-  .hero-node:nth-child(6) { animation-delay: 1.8s; }
-  .hero-node:nth-child(7) { animation-delay: 2.4s; }
+
+  .hero-node:nth-child(3) {
+    animation-delay: 0s;
+  }
+
+  .hero-node:nth-child(4) {
+    animation-delay: 0.6s;
+  }
+
+  .hero-node:nth-child(5) {
+    animation-delay: 1.2s;
+  }
+
+  .hero-node:nth-child(6) {
+    animation-delay: 1.8s;
+  }
+
+  .hero-node:nth-child(7) {
+    animation-delay: 2.4s;
+  }
 
   @keyframes hero-float {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-6px); }
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-6px);
+    }
   }
 
   /* Positions — clock layout around 180px radius center */
-  .node-top    { top: -4px;   left: 50%; transform: translateX(-50%); }
-  .node-tr     { top: 36px;  right: -8px; }
-  .node-br     { bottom: 28px; right: -4px; }
-  .node-bot    { bottom: -8px; left: 50%; transform: translateX(-50%); }
-  .node-tl     { top: 36px;  left: -8px; }
+  .node-top {
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .node-tr {
+    top: 36px;
+    right: -8px;
+  }
+
+  .node-br {
+    bottom: 28px;
+    right: -4px;
+  }
+
+  .node-bot {
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .node-tl {
+    top: 36px;
+    left: -8px;
+  }
 
   .hero-node-inner {
     width: 48px;
     height: 48px;
     background: #161616;
-    border: 1px solid rgba(255,255,255,0.07);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     transition: border-color 0.2s;
   }
-  .hero-node-inner:hover { border-color: rgba(56,189,248,0.3); }
-  .hero-node-inner svg { width: 20px; height: 20px; }
 
-  .node-col-sky    svg { color: #38bdf8; }
-  .node-col-green  svg { color: #22c55e; }
-  .node-col-yellow svg { color: #fbbf24; }
-  .node-col-purple svg { color: #a855f7; }
-  .node-col-red    svg { color: #f87171; }
+  .hero-node-inner:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+  }
+
+  .hero-node-inner svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .node-col-sky svg {
+    color: #38bdf8;
+  }
+
+  .node-col-green svg {
+    color: #22c55e;
+  }
+
+  .node-col-yellow svg {
+    color: #fbbf24;
+  }
+
+  .node-col-purple svg {
+    color: #a855f7;
+  }
+
+  .node-col-red svg {
+    color: #f87171;
+  }
 
   /* Node label tooltip */
   .node-label {
@@ -323,20 +461,30 @@
     justify-content: center;
     margin-bottom: 0;
   }
-  @media (min-width: 900px) { .hero-visual-mobile { display: none; } }
+
+  @media (min-width: 900px) {
+    .hero-visual-mobile {
+      display: none;
+    }
+  }
 
   .hero-mobile-mark {
     width: 72px;
     height: 72px;
     background: #161616;
-    border: 1px solid rgba(56,189,248,0.2);
+    border: 1px solid rgba(56, 189, 248, 0.2);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 40px rgba(56,189,248,0.12);
+    box-shadow: 0 0 40px rgba(56, 189, 248, 0.12);
   }
-  .hero-mobile-mark svg { width: 32px; height: 32px; color: #38bdf8; }
+
+  .hero-mobile-mark svg {
+    width: 32px;
+    height: 32px;
+    color: #38bdf8;
+  }
 </style>
 
 <!-- ── HERO SECTION ──────────────────────────────────────────────────── -->
@@ -353,49 +501,69 @@
         <!-- Mobile icon -->
         <div class="hero-visual-mobile" style="margin-bottom:32px;">
           <div class="hero-mobile-mark">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
           </div>
         </div>
 
         <div class="hero-pill">
           <span class="hero-pill-dot"></span>
-          AI-Powered Healthcare
+          {% trans "AI-Powered Healthcare" %}
         </div>
 
         <h1 class="hero-h1">
-          Find the right care,<br>
-          <strong>right when</strong> you need it
+          {% blocktrans %}Find the right care,<br>
+          <strong>right when</strong> you need it{% endblocktrans %}
         </h1>
 
         <p class="hero-sub">
-          Describe your symptoms and get instant recommendations for nearby specialists, hospitals, and estimated treatment costs.
+          {% trans "Describe your symptoms and get instant recommendations for nearby specialists, hospitals, and estimated treatment costs." %}
         </p>
 
         <div class="hero-actions">
           <a href="#main-form" class="hero-btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            Find Care Now
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            {% trans "Find Care Now" %}
           </a>
           <a href="{% url 'all_hospitals' %}" class="hero-btn-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-            Browse Hospitals
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18M9 21V9" />
+            </svg>
+            {% trans "Browse Hospitals" %}
           </a>
         </div>
 
         <div class="hero-trust">
           <div class="trust-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Free to use
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            {% trans "Free to use" %}
           </div>
           <div class="trust-sep"></div>
           <div class="trust-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Instant results
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            {% trans "Instant results" %}
           </div>
           <div class="trust-sep"></div>
           <div class="trust-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Real hospital data
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            {% trans "Real hospital data" %}
           </div>
         </div>
       </div>
@@ -410,43 +578,67 @@
 
           <!-- Central orb -->
           <div class="hero-orb-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
           </div>
 
           <!-- Orbiting nodes -->
           <div class="hero-node node-top">
             <div class="hero-node-inner node-col-sky">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
             </div>
-            <span class="node-label">Location</span>
+            <span class="node-label">{% trans "Location" %}</span>
           </div>
 
           <div class="hero-node node-tr">
             <div class="hero-node-inner node-col-green">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
             </div>
-            <span class="node-label">Search</span>
+            <span class="node-label">{% trans "Search" %}</span>
           </div>
 
           <div class="hero-node node-br">
             <div class="hero-node-inner node-col-yellow">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
+                stroke-width="0">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
             </div>
-            <span class="node-label">Ratings</span>
+            <span class="node-label">{% trans "Ratings" %}</span>
           </div>
 
           <div class="hero-node node-bot">
             <div class="hero-node-inner node-col-green">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M3 9h18M9 21V9" />
+              </svg>
             </div>
-            <span class="node-label">Hospitals</span>
+            <span class="node-label">{% trans "Hospitals" %}</span>
           </div>
 
           <div class="hero-node node-tl">
             <div class="hero-node-inner node-col-purple">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
             </div>
-            <span class="node-label">Costs</span>
+            <span class="node-label">{% trans "Costs" %}</span>
           </div>
 
         </div>

@@ -58,3 +58,16 @@ class Doctor(models.Model):
 
     class Meta:
         ordering = ['-is_head_doctor', 'name']
+
+
+class LabReportHistory(models.Model):
+    """Stores past lab report analyses for the history feature."""
+    filename   = models.CharField(max_length=255)
+    analysis   = models.JSONField()            # full Gemini JSON response
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.filename} — {self.created_at.strftime('%d %b %Y')}"

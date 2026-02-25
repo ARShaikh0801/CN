@@ -1,9 +1,13 @@
+{% load i18n %}
 <main id="results-section" class="hidden">
 
   <!-- New Search -->
   <button id="new-search-btn" class="new-search-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    New Search
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+    {% trans "New Search" %}
   </button>
 
   <div class="results-grid">
@@ -12,18 +16,24 @@
     <div class="results-list-col">
 
       <div class="results-list-header">
-        <h3 class="results-title">Recommended Hospitals</h3>
+        <h3 class="results-title">{% trans "Recommended Hospitals" %}</h3>
 
         <div class="filter-wrap">
-          <svg class="fi-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          <svg class="fi-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+          </svg>
           <select id="hospital-filter" class="filter-select">
-            <option value="all">All Hospitals</option>
-            <option value="government">Government</option>
-            <option value="trust">Trust</option>
-            <option value="private">Private</option>
-            <option value="premium">Premium</option>
+            <option value="all">{% trans "All Hospitals" %}</option>
+            <option value="government">{% trans "Government" %}</option>
+            <option value="trust">{% trans "Trust" %}</option>
+            <option value="private">{% trans "Private" %}</option>
+            <option value="premium">{% trans "Premium" %}</option>
           </select>
-          <svg class="fi-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="fi-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
         </div>
       </div>
       <!-- Cards injected here by JS -->
@@ -36,21 +46,21 @@
       <div class="sidebar-card">
 
         <div class="sidebar-header">
-          <span class="sidebar-header-label">Your Search</span>
-          <h4>Analysis Summary</h4>
+          <span class="sidebar-header-label">{% trans "Your Search" %}</span>
+          <h4>{% trans "Analysis Summary" %}</h4>
         </div>
 
         <div class="sidebar-body">
 
           <div class="sb-field">
-            <span class="sb-field-label">Symptoms</span>
+            <span class="sb-field-label">{% trans "Symptoms" %}</span>
             <p id="summary-symptoms" class="sb-field-value">—</p>
           </div>
 
           <div class="sb-divider"></div>
 
           <div class="sb-field">
-            <span class="sb-field-label">Location</span>
+            <span class="sb-field-label">{% trans "Location" %}</span>
             <p id="summary-location" class="sb-field-value mono">—</p>
           </div>
 
@@ -59,17 +69,17 @@
             <div class="sb-divider"></div>
 
             <div class="sb-field">
-              <span class="sb-field-label">Recommended Specialist</span>
+              <span class="sb-field-label">{% trans "Recommended Specialist" %}</span>
               <p id="summary-speciality" class="sb-speciality">—</p>
             </div>
 
             <div class="sb-field">
-              <span class="sb-field-label">Urgency Level</span>
+              <span class="sb-field-label">{% trans "Urgency Level" %}</span>
               <span id="summary-urgency" class="urgency-badge">—</span>
             </div>
 
             <div class="sb-field">
-              <span class="sb-field-label">Possible Conditions</span>
+              <span class="sb-field-label">{% trans "Possible Conditions" %}</span>
               <div id="summary-diseases" class="disease-tags"></div>
             </div>
           </div>

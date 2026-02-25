@@ -1,0 +1,1263 @@
+{% extends 'core/base.html' %}
+{% load static i18n %}
+{% get_current_language as CURRENT_LANG %}
+
+{% block extra_css %}
+<style>
+    /* ─── Page Layout ───────────────────────────────────────────── */
+    .lr-page {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 48px 32px 80px;
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 32px;
+        align-items: start;
+    }
+
+    @media (max-width: 900px) {
+        .lr-page {
+            grid-template-columns: 1fr;
+            padding: 32px 20px 60px;
+        }
+    }
+
+    /* ─── Section title ─────────────────────────────────────────── */
+    .lr-hero {
+        margin-bottom: 28px;
+    }
+
+    .lr-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 99px;
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #0369a1;
+        letter-spacing: 0.04em;
+        margin-bottom: 14px;
+    }
+
+    .lr-hero-badge svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .lr-hero h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.04em;
+        line-height: 1.2;
+        margin-bottom: 8px;
+    }
+
+    .lr-hero p {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.65;
+    }
+
+    /* ─── Upload Card ───────────────────────────────────────────── */
+    .upload-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .drop-zone {
+        position: relative;
+        border: 2px dashed #d1d5db;
+        border-radius: 14px;
+        padding: 40px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+        background: #fafaf9;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.drag-over {
+        border-color: var(--sky);
+        background: #f0f9ff;
+    }
+
+    .drop-zone input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+    }
+
+    .drop-icon {
+        width: 52px;
+        height: 52px;
+        background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+    }
+
+    .drop-icon svg {
+        width: 24px;
+        height: 24px;
+        color: #0369a1;
+    }
+
+    .drop-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 4px;
+    }
+
+    .drop-sub {
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+    .drop-sub span {
+        font-family: 'DM Mono', monospace;
+        font-size: 11px;
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin: 0 2px;
+    }
+
+    /* File preview */
+    .file-preview {
+        display: none;
+        align-items: center;
+        gap: 12px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 16px;
+    }
+
+    .file-preview.shown {
+        display: flex;
+    }
+
+    .file-preview-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: #dbeafe;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .file-preview-icon svg {
+        width: 18px;
+        height: 18px;
+        color: #2563eb;
+    }
+
+    .file-preview-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink);
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .file-preview-size {
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .file-remove-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--muted-2);
+        transition: color 0.15s;
+        padding: 4px;
+        border-radius: 6px;
+    }
+
+    .file-remove-btn:hover {
+        color: var(--red);
+    }
+
+    .file-remove-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Analyze button */
+    .analyze-btn {
+        width: 100%;
+        padding: 14px;
+        background: var(--ink);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+        letter-spacing: -0.01em;
+    }
+
+    .analyze-btn:hover:not(:disabled) {
+        background: #1f1f1f;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
+    }
+
+    .analyze-btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+    .analyze-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* ─── Loading ───────────────────────────────────────────────── */
+    .loading-state {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .loading-state.shown {
+        display: flex;
+    }
+
+    .spinner-ring {
+        width: 48px;
+        height: 48px;
+        border: 3px solid #e5e7eb;
+        border-top-color: var(--ink);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-text {
+        font-size: 14px;
+        color: var(--muted);
+        font-weight: 500;
+    }
+
+    .loading-dots span {
+        display: inline-block;
+        animation: dot-bounce 1.4s ease-in-out infinite;
+    }
+
+    .loading-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .loading-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes dot-bounce {
+
+        0%,
+        80%,
+        100% {
+            transform: translateY(0)
+        }
+
+        40% {
+            transform: translateY(-6px)
+        }
+    }
+
+    /* ─── Error Banner ──────────────────────────────────────────── */
+    .error-banner {
+        display: none;
+        align-items: flex-start;
+        gap: 10px;
+        background: #fff5f5;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        padding: 14px 16px;
+        font-size: 14px;
+        color: #991b1b;
+    }
+
+    .error-banner.shown {
+        display: flex;
+    }
+
+    .error-banner svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        margin-top: 1px;
+        color: var(--red);
+    }
+
+    /* ─── Results Panel ─────────────────────────────────────────── */
+    .results-panel {
+        display: none;
+        flex-direction: column;
+        gap: 24px;
+        margin-top: 24px;
+    }
+
+    .results-panel.shown {
+        display: flex;
+    }
+
+    .result-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .result-card-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 20px 24px;
+        border-bottom: 1px solid #f3f3f1;
+    }
+
+    .rc-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .rc-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .rc-icon.blue {
+        background: #eff6ff;
+    }
+
+    .rc-icon.blue svg {
+        color: #2563eb;
+    }
+
+    .rc-icon.green {
+        background: #f0fdf4;
+    }
+
+    .rc-icon.green svg {
+        color: #16a34a;
+    }
+
+    .rc-icon.amber {
+        background: #fffbeb;
+    }
+
+    .rc-icon.amber svg {
+        color: #d97706;
+    }
+
+    .rc-icon.purple {
+        background: #faf5ff;
+    }
+
+    .rc-icon.purple svg {
+        color: #7c3aed;
+    }
+
+    .rc-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+    }
+
+    .rc-sub {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 1px;
+    }
+
+    .result-card-body {
+        padding: 20px 24px;
+    }
+
+    /* Summary card */
+    .summary-text {
+        font-size: 15px;
+        color: var(--ink-2);
+        line-height: 1.75;
+    }
+
+    /* Parameters table */
+    .param-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .param-row {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 12px;
+        align-items: start;
+        padding: 14px 16px;
+        background: #fafaf9;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        transition: box-shadow 0.15s;
+    }
+
+    .param-row:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .param-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 4px;
+    }
+
+    .param-expl {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.5;
+    }
+
+    .param-value-wrap {
+        text-align: right;
+    }
+
+    .param-value {
+        font-family: 'DM Mono', monospace;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink);
+    }
+
+    .param-range {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 99px;
+        white-space: nowrap;
+    }
+
+    .status-badge.normal {
+        background: #f0fdf4;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+    }
+
+    .status-badge.high {
+        background: #fff5f5;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+
+    .status-badge.low {
+        background: #fffbeb;
+        color: #b45309;
+        border: 1px solid #fde68a;
+    }
+
+    .status-badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    /* Conditions list */
+    .condition-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .condition-item {
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: #fafaf9;
+    }
+
+    .condition-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .condition-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+        flex: 1;
+    }
+
+    .likelihood-badge {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 3px 9px;
+        border-radius: 99px;
+    }
+
+    .likelihood-badge.likely {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+    }
+
+    .likelihood-badge.possible {
+        background: #fffbeb;
+        color: #d97706;
+        border: 1px solid #fde68a;
+    }
+
+    .likelihood-badge.unlikely {
+        background: #f0fdf4;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+    }
+
+    .condition-explanation {
+        font-size: 14px;
+        color: var(--ink-2);
+        line-height: 1.6;
+        margin-bottom: 6px;
+    }
+
+    .condition-cause {
+        font-size: 13px;
+        color: var(--muted);
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        line-height: 1.5;
+    }
+
+    .condition-cause svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        color: var(--muted-2);
+    }
+
+    /* Recommendation */
+    .recommendation-box {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 12px;
+    }
+
+    .recommendation-box svg {
+        width: 18px;
+        height: 18px;
+        color: #16a34a;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .recommendation-box p {
+        font-size: 14px;
+        color: #166534;
+        line-height: 1.65;
+    }
+
+    /* Disclaimer */
+    .disclaimer-box {
+        display: flex;
+        gap: 10px;
+        padding: 14px 16px;
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 12px;
+        margin-top: 8px;
+    }
+
+    .disclaimer-box svg {
+        width: 14px;
+        height: 14px;
+        color: #d97706;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .disclaimer-box p {
+        font-size: 12px;
+        color: #92400e;
+        line-height: 1.6;
+    }
+
+    /* ─── History Sidebar ───────────────────────────────────────── */
+    .history-sidebar {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        position: sticky;
+        top: 80px;
+    }
+
+    .history-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 20px;
+        border-bottom: 1px solid #f3f3f1;
+    }
+
+    .history-header-icon {
+        width: 34px;
+        height: 34px;
+        background: #f0f9ff;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .history-header-icon svg {
+        width: 16px;
+        height: 16px;
+        color: #0369a1;
+    }
+
+    .history-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink);
+    }
+
+    .history-sub {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 1px;
+    }
+
+    .history-list {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 520px;
+        overflow-y: auto;
+    }
+
+    .history-empty {
+        padding: 32px 20px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .history-empty svg {
+        width: 32px;
+        height: 32px;
+        color: #d1d5db;
+        margin: 0 auto 10px;
+        display: block;
+    }
+
+    .history-item {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        cursor: pointer;
+        transition: border-color 0.15s, background 0.15s, transform 0.1s;
+        background: #fafaf9;
+    }
+
+    .history-item:hover {
+        border-color: var(--sky);
+        background: #f0f9ff;
+        transform: translateX(2px);
+    }
+
+    .history-item-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    .history-filename {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 160px;
+    }
+
+    .history-date {
+        font-family: 'DM Mono', monospace;
+        font-size: 10px;
+        color: var(--muted-2);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .history-report-type {
+        font-size: 12px;
+        color: #0369a1;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+
+    .history-conditions {
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="lr-page">
+
+    <!-- ── LEFT: Upload + Results ── -->
+    <div>
+        <div class="lr-hero">
+            <div class="lr-hero-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18" />
+                </svg>
+                AI Lab Report Analyzer
+            </div>
+            <h1>{% blocktrans %}Understand Your<br>Lab Report Instantly{% endblocktrans %}</h1>
+            <p>{% trans "Upload your lab report and get a clear, plain-English explanation — what each value means, what's normal, and what conditions it might indicate." %}</p>
+        </div>
+
+        <!-- Upload Card -->
+        <div class="upload-card" id="uploadCard">
+            <div class="drop-zone" id="dropZone">
+                <input type="file" id="reportFile" accept=".jpg,.jpeg,.png,.pdf" />
+                <div class="drop-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                </div>
+                <div class="drop-title">{% trans "Drop your lab report here" %}</div>
+                <div class="drop-sub">{% trans "or click to browse" %} &nbsp;·&nbsp; <span>JPG</span> <span>PNG</span>
+                    <span>PDF</span>
+                </div>
+            </div>
+
+            <div class="file-preview" id="filePreview">
+                <div class="file-preview-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                </div>
+                <div style="flex:1;min-width:0">
+                    <div class="file-preview-name" id="previewName">—</div>
+                    <div class="file-preview-size" id="previewSize">—</div>
+                </div>
+                <button class="file-remove-btn" id="removeFileBtn" title="Remove file">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="error-banner" id="errorBanner">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span id="errorText">An error occurred.</span>
+            </div>
+
+            <button class="analyze-btn" id="analyzeBtn" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                {% trans "Analyze Report" %}
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner-ring"></div>
+            <div class="loading-text">
+                {% trans "Gemini is reading your report" %}<span
+                    class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+            </div>
+            <div style="font-size:13px;color:var(--muted-2)">{% trans "This may take 10-20 seconds" %}</div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="resultsPanel">
+
+            <!-- Overall Summary -->
+            <div class="result-card" id="summaryCard">
+                <div class="result-card-header">
+                    <div class="rc-icon blue">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                            <polyline points="10 9 9 9 8 9" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="rc-title" id="reportTypeLabel">{% trans "Lab Report" %}</div>
+                        <div class="rc-sub">{% trans "Overall Summary" %}</div>
+                    </div>
+                </div>
+                <div class="result-card-body">
+                    <p class="summary-text" id="summaryText">—</p>
+                </div>
+            </div>
+
+            <!-- Parameters -->
+            <div class="result-card">
+                <div class="result-card-header">
+                    <div class="rc-icon green">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="rc-title">{% trans "Test Parameters" %}</div>
+                        <div class="rc-sub">{% trans "Each value explained in simple language" %}</div>
+                    </div>
+                </div>
+                <div class="result-card-body">
+                    <div class="param-list" id="paramList"></div>
+                </div>
+            </div>
+
+            <!-- Possible Conditions -->
+            <div class="result-card">
+                <div class="result-card-header">
+                    <div class="rc-icon amber">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="rc-title">{% trans "Possible Conditions" %}</div>
+                        <div class="rc-sub">{% trans "What these results might indicate" %}</div>
+                    </div>
+                </div>
+                <div class="result-card-body">
+                    <div class="condition-list" id="conditionList"></div>
+                </div>
+            </div>
+
+            <!-- Recommendation -->
+            <div class="result-card">
+                <div class="result-card-header">
+                    <div class="rc-icon purple">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="rc-title">{% trans "What To Do Next" %}</div>
+                        <div class="rc-sub">{% trans "Recommended next steps" %}</div>
+                    </div>
+                </div>
+                <div class="result-card-body">
+                    <div class="recommendation-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <p id="recommendationText">—</p>
+                    </div>
+                    <div class="disclaimer-box" style="margin-top:16px">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <p id="disclaimerText">{% trans 'This analysis is AI-generated for informational purposes only. Please consult a qualified doctor.' %}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /results-panel -->
+    </div>
+
+    <!-- ── RIGHT: History Sidebar ── -->
+    <div class="history-sidebar">
+        <div class="history-header">
+            <div class="history-header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+            </div>
+            <div>
+                <div class="history-title">{% trans "Past Analyses" %}</div>
+                <div class="history-sub">{% trans "Last 3 months" %}</div>
+            </div>
+        </div>
+
+        <div class="history-list" id="historyList">
+            {% if history %}
+            {% for item in history %}
+            {{ item.analysis|json_script:item.id }}
+            <div class="history-item" data-history-id="{{ item.id }}" data-filename="{{ item.filename|escapejs }}"
+                title="{{ item.filename }}">
+                <div class="history-item-top">
+                    <div class="history-filename">{{ item.filename }}</div>
+                    <div class="history-date">{{ item.created_at|date:"d M" }}</div>
+                </div>
+                {% if item.analysis.report_type %}
+                <div class="history-report-type">{{ item.analysis.report_type }}</div>
+                {% endif %}
+                <div class="history-conditions">
+                    {% if item.analysis.possible_conditions %}
+                    {% for cond in item.analysis.possible_conditions %}
+                    {% if forloop.counter <= 2 %}{{ cond.name }}
+                    {% if not forloop.last and forloop.counter < 2 %}, 
+                    {% endif %}{% endif %}{% endfor %} 
+                    {% if item.analysis.possible_conditions|length > 2 %} 
+                        +{{ item.analysis.possible_conditions|length|add:"-2" }} more
+                        {% endif %}
+                        {% else %}
+                        No conditions found
+                        {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="history-empty">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                </svg>
+                No past analyses yet.<br>{% trans "Upload your first lab report to get started!" %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div><!-- /lr-page -->
+
+<script>
+    // Preserve the active language prefix so AJAX calls hit the right i18n URL.
+    // Without this, a hardcoded '/api/...' URL resolves with no language prefix
+    // and Django activates English at the URL layer, overriding the session.
+    const LANG_CODE = '{{ CURRENT_LANG }}';
+    const LANG_PREFIX = (LANG_CODE && LANG_CODE !== 'en') ? '/' + LANG_CODE : '';
+
+    // ──────────────────────────────────────────────
+    // File selection & drag-and-drop
+    // ──────────────────────────────────────────────
+    const fileInput = document.getElementById('reportFile');
+    const dropZone = document.getElementById('dropZone');
+    const filePreview = document.getElementById('filePreview');
+    const previewName = document.getElementById('previewName');
+    const previewSize = document.getElementById('previewSize');
+    const removeBtn = document.getElementById('removeFileBtn');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const errorBanner = document.getElementById('errorBanner');
+    const errorText = document.getElementById('errorText');
+
+    let selectedFile = null;
+
+    // ──────────────────────────────────────────────
+    // History sidebar — delegated click listener
+    // (safe: reads JSON from <script type="application/json"> tags
+    //  rendered by Django's json_script filter, no onclick needed)
+    // ──────────────────────────────────────────────
+    document.getElementById('historyList').addEventListener('click', function (e) {
+        const item = e.target.closest('.history-item');
+        if (!item) return;
+        const histId = item.dataset.historyId;
+        const filename = item.dataset.filename;
+        const scriptEl = document.getElementById(histId);
+        if (!scriptEl) { showError('History data not found.'); return; }
+        let analysis;
+        try {
+            analysis = JSON.parse(scriptEl.textContent);
+        } catch (err) {
+            showError('Could not read this history entry.');
+            return;
+        }
+        document.getElementById('uploadCard').style.display = 'flex';
+        document.getElementById('loadingState').classList.remove('shown');
+        hideError();
+        renderResults(analysis, filename);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+
+    function formatBytes(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function setFile(file) {
+        if (!file) return;
+        const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+        if (!allowed.includes(file.type)) {
+            showError('Unsupported file type. Please upload a JPG, PNG, or PDF.');
+            return;
+        }
+        selectedFile = file;
+        previewName.textContent = file.name;
+        previewSize.textContent = formatBytes(file.size);
+        filePreview.classList.add('shown');
+        analyzeBtn.disabled = false;
+        hideError();
+    }
+
+    function clearFile() {
+        selectedFile = null;
+        fileInput.value = '';
+        filePreview.classList.remove('shown');
+        analyzeBtn.disabled = true;
+    }
+
+    fileInput.addEventListener('change', e => setFile(e.target.files[0]));
+    removeBtn.addEventListener('click', clearFile);
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        setFile(e.dataTransfer.files[0]);
+    });
+
+    function showError(msg) {
+        errorText.textContent = msg;
+        errorBanner.classList.add('shown');
+    }
+    function hideError() { errorBanner.classList.remove('shown'); }
+
+    // ──────────────────────────────────────────────
+    // Submit / Analyze
+    // ──────────────────────────────────────────────
+    analyzeBtn.addEventListener('click', async () => {
+        if (!selectedFile) return;
+        hideError();
+        showLoading(true);
+        hideResults();
+
+        const formData = new FormData();
+        formData.append('report', selectedFile);
+
+        try {
+            const res = await fetch(LANG_PREFIX + '/api/analyze-lab-report', { method: 'POST', body: formData });
+            const data = await res.json();
+            showLoading(false);
+
+            if (!res.ok || data.error) {
+                showError(data.error || 'Analysis failed. Please try again.');
+                return;
+            }
+            renderResults(data.analysis, selectedFile.name);
+            // Dynamically prepend to history sidebar (no reload needed)
+            addToHistorySidebar(data.analysis, selectedFile.name);
+        } catch (err) {
+            showLoading(false);
+            showError('Network error. Please check your connection and try again.');
+        }
+    });
+
+    function showLoading(show) {
+        document.getElementById('loadingState').classList.toggle('shown', show);
+        document.getElementById('uploadCard').style.display = show ? 'none' : 'flex';
+        analyzeBtn.disabled = show;
+    }
+
+    function hideResults() {
+        document.getElementById('resultsPanel').classList.remove('shown');
+    }
+
+    // ──────────────────────────────────────────────
+    // Render results
+    // ──────────────────────────────────────────────
+    function renderResults(analysis, filename) {
+        if (analysis.error) { showError(analysis.error); return; }
+
+        // Report type & summary
+        document.getElementById('reportTypeLabel').textContent = analysis.report_type || 'Lab Report';
+        document.getElementById('summaryText').textContent = analysis.overall_summary || '—';
+
+        // Parameters
+        const paramList = document.getElementById('paramList');
+        paramList.innerHTML = '';
+        (analysis.parameters || []).forEach(p => {
+            const statusClass = (p.status || 'normal').toLowerCase();
+            paramList.innerHTML += `
+        <div class="param-row">
+          <div>
+            <div class="param-name">${escHtml(p.name)}</div>
+            <div class="param-expl">${escHtml(p.simple_explanation || '')}</div>
+          </div>
+          <div class="param-value-wrap">
+            <div class="param-value">${escHtml(p.value)}</div>
+            <div class="param-range">Normal: ${escHtml(p.normal_range || '—')}</div>
+          </div>
+          <div>
+            <span class="status-badge ${statusClass}">${statusClass.charAt(0).toUpperCase() + statusClass.slice(1)}</span>
+          </div>
+        </div>`;
+        });
+
+        // Conditions
+        const condList = document.getElementById('conditionList');
+        condList.innerHTML = '';
+        (analysis.possible_conditions || []).forEach(c => {
+            const likelihood = (c.likelihood || 'possible').toLowerCase();
+            condList.innerHTML += `
+        <div class="condition-item">
+          <div class="condition-header">
+            <div class="condition-name">${escHtml(c.name)}</div>
+            <span class="likelihood-badge ${likelihood}">${likelihood.charAt(0).toUpperCase() + likelihood.slice(1)}</span>
+          </div>
+          <div class="condition-explanation">${escHtml(c.explanation || '')}</div>
+          ${c.cause ? `<div class="condition-cause">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Cause: ${escHtml(c.cause)}</span></div>` : ''}
+        </div>`;
+        });
+
+        document.getElementById('recommendationText').textContent = analysis.recommendation || '—';
+        document.getElementById('disclaimerText').textContent = analysis.disclaimer || 'This analysis is AI-generated. Please consult a doctor.';
+
+        document.getElementById('resultsPanel').classList.add('shown');
+        document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ──────────────────────────────────────────────
+    // Dynamically add new entry to history sidebar
+    // (works with the delegated click listener above)
+    // ──────────────────────────────────────────────
+    function addToHistorySidebar(analysis, filename) {
+        const list = document.getElementById('historyList');
+        // Remove empty-state placeholder if present
+        const empty = list.querySelector('.history-empty');
+        if (empty) empty.remove();
+
+        // Give this entry a unique temporary ID so the delegated listener can find it
+        const tempId = 'new-' + Date.now();
+
+        // Inject a <script type="application/json"> tag — same as Django's json_script
+        const scriptTag = document.createElement('script');
+        scriptTag.type = 'application/json';
+        scriptTag.id = tempId;
+        scriptTag.textContent = JSON.stringify(analysis);
+        list.appendChild(scriptTag);
+
+        const today = new Date();
+        const dateStr = today.getDate() + ' ' + today.toLocaleString('en-GB', { month: 'short' });
+        const conditions = (analysis.possible_conditions || []);
+        const condPreview = conditions.slice(0, 2).map(c => c.name).join(', ')
+            + (conditions.length > 2 ? ` +${conditions.length - 2} more` : '');
+
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.title = filename;
+        div.dataset.historyId = tempId;
+        div.dataset.filename = filename;
+        div.innerHTML = `
+            <div class="history-item-top">
+                <div class="history-filename">${escHtml(filename)}</div>
+                <div class="history-date">${dateStr}</div>
+            </div>
+            ${analysis.report_type ? `<div class="history-report-type">${escHtml(analysis.report_type)}</div>` : ''}
+            <div class="history-conditions">${escHtml(condPreview || 'No conditions found')}</div>`;
+
+        list.insertBefore(div, list.firstChild);
+    }
+
+    function escHtml(str) {
+        return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+</script>
+{% endblock %}

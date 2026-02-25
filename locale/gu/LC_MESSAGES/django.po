@@ -1,0 +1,632 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-25 12:49+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Gujarati\n"
+"Language: gu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\CareNavigator_Django\settings.py:112
+msgid "English"
+msgstr "English"
+
+#: .\CareNavigator_Django\settings.py:113
+msgid "हिन्दी"
+msgstr "हिन्दी"
+
+#: .\CareNavigator_Django\settings.py:114
+msgid "मराठी"
+msgstr "मराठी"
+
+#: .\CareNavigator_Django\settings.py:115
+msgid "ગુજરાતી"
+msgstr "ગુજરાતી"
+
+#: .\CareNavigator_Django\settings.py:116
+msgid "ਪੰਜਾਬੀ"
+msgstr "ਪੰਜਾਬੀ"
+
+#: .\CareNavigator_Django\settings.py:117
+msgid "বাংলা"
+msgstr "বাংলা"
+
+#: .\CareNavigator_Django\settings.py:118
+msgid "தமிழ்"
+msgstr "தமிழ்"
+
+#: .\CareNavigator_Django\settings.py:119
+msgid "తెలుగు"
+msgstr "తెలుగు"
+
+#: .\core\templates\core\all_hospitals.html:732
+msgid "Medical Directory"
+msgstr "તબીબી ડિરેક્ટરી"
+
+#: .\core\templates\core\all_hospitals.html:734
+msgid "Find a <strong>Hospital</strong>"
+msgstr "એક <strong>હોસ્પિટલ</strong> શોધો"
+
+#: .\core\templates\core\all_hospitals.html:735
+msgid "Browse top-rated medical facilities near you"
+msgstr "તમારી નજીકની ટોચની રેટેડ તબીબી સુવિધાઓ જુઓ"
+
+#: .\core\templates\core\all_hospitals.html:742
+msgid "Filter"
+msgstr "ફિલ્ટર"
+
+#: .\core\templates\core\all_hospitals.html:755
+msgid "All Cities"
+msgstr "બધા શહેરો"
+
+#: .\core\templates\core\all_hospitals.html:774
+msgid "All Types"
+msgstr "બધા પ્રકારો"
+
+#: .\core\templates\core\all_hospitals.html:793
+msgid "Any Rating"
+msgstr "કોઈ પણ રેટિંગ"
+
+#: .\core\templates\core\all_hospitals.html:794
+msgid "4.5+ Excellent"
+msgstr "4.5+ ઉત્કૃષ્ટ"
+
+#: .\core\templates\core\all_hospitals.html:796
+msgid "4.0+ Very Good"
+msgstr "4.0+ ખૂબ સારું"
+
+#: .\core\templates\core\all_hospitals.html:798
+msgid "3.5+ Good"
+msgstr "3.5+ સારું"
+
+#: .\core\templates\core\all_hospitals.html:800
+msgid "3.0+ Average"
+msgstr "3.0+ સરેરાશ"
+
+#: .\core\templates\core\all_hospitals.html:818
+msgid "All Pincodes"
+msgstr "બધા પિનકોડ"
+
+#: .\core\templates\core\all_hospitals.html:838
+msgid "Reset"
+msgstr "રીસેટ કરો"
+
+#: .\core\templates\core\all_hospitals.html:848
+#, python-format
+msgid ""
+"Showing <strong>%(count)s</strong>\n"
+"        result"
+msgstr ""
+"<strong>%(count)s</strong>\n"
+"        પરિણામ બતાવી રહ્યા છીએ"
+
+#: .\core\templates\core\all_hospitals.html:900
+msgid "Facilities"
+msgstr "સુવિધાઓ"
+
+#: .\core\templates\core\all_hospitals.html:909
+msgid "Beds"
+msgstr "પથારી"
+
+#: .\core\templates\core\all_hospitals.html:920
+msgid "Doctors"
+msgstr "ડોક્ટરો"
+
+#: .\core\templates\core\all_hospitals.html:930
+msgid "Equipment"
+msgstr "સાધનો"
+
+#: .\core\templates\core\all_hospitals.html:953
+msgid "Specialities"
+msgstr "વિશેષતાઓ"
+
+#: .\core\templates\core\all_hospitals.html:959
+msgid "more"
+msgstr "વધુ"
+
+#: .\core\templates\core\all_hospitals.html:978
+msgid "24/7 Ambulance"
+msgstr "24/7 એમ્બ્યુલન્સ"
+
+#: .\core\templates\core\all_hospitals.html:992
+msgid "Directions"
+msgstr "દિશાઓ"
+
+#: .\core\templates\core\all_hospitals.html:1001
+msgid "No Map"
+msgstr "કોઈ નકશો નથી"
+
+#: .\core\templates\core\all_hospitals.html:1006
+msgid "View Details"
+msgstr "વિગતો જુઓ"
+
+#: .\core\templates\core\all_hospitals.html:1029
+msgid "No hospitals found"
+msgstr "કોઈ હોસ્પિટલ મળી નથી"
+
+#: .\core\templates\core\all_hospitals.html:1030
+msgid ""
+"We couldn't find any hospitals matching your filters. Try adjusting your "
+"search criteria."
+msgstr ""
+"તમારા ફિલ્ટર સાથે મેળ ખાતી કોઈ હોસ્પિટલ મળી નથી. "
+"તમારા શોધ માપદંડ બદલવાનો પ્રયાસ કરો."
+
+#: .\core\templates\core\all_hospitals.html:1037
+msgid "Clear All Filters"
+msgstr "બધા ફિલ્ટર સાફ કરો"
+
+#: .\core\templates\core\base.html:689
+msgid "Home"
+msgstr "હોમ"
+
+#: .\core\templates\core\base.html:697
+#: .\core\templates\core\partials\hero.html:629
+msgid "Hospitals"
+msgstr "હોસ્પિટલો"
+
+#: .\core\templates\core\base.html:705
+#: .\core\templates\core\lab_report.html:879
+msgid "Lab Report"
+msgstr "લેબ રિપોર્ટ"
+
+#: .\core\templates\core\base.html:710
+msgid "Select language"
+msgstr "ભાષા પસંદ કરો"
+
+#: .\core\templates\core\base.html:767
+#: .\core\templates\core\partials\main_form.html:552
+msgid "Disclaimer:"
+msgstr "અસ્વીકૃતિ:"
+
+#: .\core\templates\core\base.html:767
+#: .\core\templates\core\partials\main_form.html:552
+msgid ""
+"AI-generated results are for informational purposes only. Always consult a "
+"medical professional for emergencies and health decisions."
+msgstr ""
+"AI દ્વારા જનરેટ થયેલ પરિણામો માત્ર માહિતી માટે છે. "
+"કટોકટી અને સ્વાસ્થ્ય નિર્ણયો માટે હંમેશા તબીબી વ્યાવસાયિકની સલાહ લો."
+
+#: .\core\templates\core\base.html:775
+msgid "Emergency services"
+msgstr "કટોકટી સેવાઓ"
+
+#: .\core\templates\core\base.html:785
+#: .\core\templates\core\hospital_detail.html:168
+msgid "Emergency"
+msgstr "કટોકટી"
+
+#: .\core\templates\core\base.html:805
+msgid "Emergency Services"
+msgstr "કટોકટી સેવાઓ"
+
+#: .\core\templates\core\base.html:807
+msgid "Close"
+msgstr "બંધ કરો"
+
+#: .\core\templates\core\base.html:819
+msgid "National Emergency Ambulance"
+msgstr "રાષ્ટ્રીય કટોકટી એમ્બ્યુલન્સ"
+
+#: .\core\templates\core\base.html:833
+msgid "Police Emergency"
+msgstr "પોલીસ કટોકટી"
+
+#: .\core\templates\core\base.html:853
+msgid "For life-threatening emergencies, call"
+msgstr "જીવ-ઘાતક કટોકટી માટે, ફોન કરો"
+
+#: .\core\templates\core\hospital_detail.html:21
+#: .\core\templates\core\partials\results.html:27
+msgid "All Hospitals"
+msgstr "બધી હોસ્પિટલો"
+
+#: .\core\templates\core\hospital_detail.html:60
+msgid "Get Directions"
+msgstr "દિશા-નિર્દેશ મેળવો"
+
+#: .\core\templates\core\hospital_detail.html:73
+msgid "Share"
+msgstr "શેર કરો"
+
+#: .\core\templates\core\hospital_detail.html:98
+msgid "Medical Specialities"
+msgstr "તબીબી વિશેષતાઓ"
+
+#: .\core\templates\core\hospital_detail.html:99
+msgid "Available departments and services"
+msgstr "ઉપલબ્ધ વિભાગો અને સેવાઓ"
+
+#: .\core\templates\core\hospital_detail.html:120
+msgid "No specific specialities listed."
+msgstr "કોઈ ચોક્કસ વિશેષતા સૂચિબદ્ધ નથી."
+
+#: .\core\templates\core\hospital_detail.html:136
+msgid "Facilities & Equipment"
+msgstr "સુવિધાઓ અને સાધનો"
+
+#: .\core\templates\core\hospital_detail.html:137
+msgid "Available infrastructure and services"
+msgstr "ઉપલબ્ધ ઈન્ફ્રાસ્ટ્રક્ચર અને સેવાઓ"
+
+#: .\core\templates\core\hospital_detail.html:141
+msgid "Bed Capacity"
+msgstr "પથારીની ક્ષમતા"
+
+#: .\core\templates\core\hospital_detail.html:149
+msgid "Total Beds"
+msgstr "કુલ પથારી"
+
+#: .\core\templates\core\hospital_detail.html:157
+msgid "ICU Beds"
+msgstr "ICU પથારી"
+
+#: .\core\templates\core\hospital_detail.html:172
+msgid "Diagnostic Equipment"
+msgstr "નિદાન સાધનો"
+
+#: .\core\templates\core\hospital_detail.html:181
+msgid "X-Ray"
+msgstr "X-રે"
+
+#: .\core\templates\core\hospital_detail.html:190
+msgid "MRI"
+msgstr "MRI"
+
+#: .\core\templates\core\hospital_detail.html:199
+msgid "CT Scan"
+msgstr "CT સ્કેન"
+
+#: .\core\templates\core\hospital_detail.html:208
+msgid "Ultrasound"
+msgstr "અલ્ટ્રાસાઉન્ડ"
+
+#: .\core\templates\core\hospital_detail.html:212
+msgid "Services"
+msgstr "સેવાઓ"
+
+#: .\core\templates\core\hospital_detail.html:221
+msgid "Blood Bank"
+msgstr "બ્લડ બેંક"
+
+#: .\core\templates\core\hospital_detail.html:230
+msgid "Laboratory"
+msgstr "પ્રયોગશાળા"
+
+#: .\core\templates\core\hospital_detail.html:239
+msgid "Pharmacy"
+msgstr "ફાર્મસી"
+
+#: .\core\templates\core\hospital_detail.html:248
+msgid "Ambulance"
+msgstr "એમ્બ્યુલન્સ"
+
+#: .\core\templates\core\hospital_detail.html:259
+msgid "Operation Theaters"
+msgstr "ઓપરેશન થિયેટર"
+
+#: .\core\templates\core\hospital_detail.html:279
+msgid "Medical Team"
+msgstr "તબીબી ટીમ"
+
+#: .\core\templates\core\hospital_detail.html:280
+msgid "Our experienced doctors and specialists"
+msgstr "અમારા અનુભવી ડોક્ટરો અને નિષ્ણાતો"
+
+#: .\core\templates\core\hospital_detail.html:292
+msgid "Head"
+msgstr "વડા"
+
+#: .\core\templates\core\hospital_detail.html:332
+msgid "No doctor information available at this time."
+msgstr "આ સમયે કોઈ ડોક્ટરની માહિતી ઉપલબ્ધ નથી."
+
+#: .\core\templates\core\hospital_detail.html:348
+msgid "Accepted Insurance & Schemes"
+msgstr "સ્વીકૃત વીમો અને યોજનાઓ"
+
+#: .\core\templates\core\hospital_detail.html:349
+msgid "Payment methods and coverage"
+msgstr "ચુકવણી પદ્ધતિઓ અને કવરેજ"
+
+#: .\core\templates\core\hospital_detail.html:391
+msgid "Contact hospital directly for insurance and scheme details."
+msgstr "વીમો અને યોજનાની વિગતો માટે સીધા હોસ્પિટલ સાથે સંપર્ક કરો."
+
+#: .\core\templates\core\hospital_detail.html:404
+msgid "Get in Touch"
+msgstr "સંપર્કમાં રહો"
+
+#: .\core\templates\core\hospital_detail.html:405
+msgid "Contact Information"
+msgstr "સંપર્ક માહિતી"
+
+#: .\core\templates\core\hospital_detail.html:419
+msgid "Emergency Line"
+msgstr "કટોકટી લાઇન"
+
+#: .\core\templates\core\hospital_detail.html:438
+msgid "Ambulance Service"
+msgstr "એમ્બ્યુલન્સ સેવા"
+
+#: .\core\templates\core\hospital_detail.html:453
+msgid "Full Address"
+msgstr "સંપૂર્ણ સરનામું"
+
+#: .\core\templates\core\hospital_detail.html:470
+msgid "Need a Checkup?"
+msgstr "ચેકઅપની જરૂર છે?"
+
+#: .\core\templates\core\hospital_detail.html:471
+msgid ""
+"Use our AI-powered symptom checker to get a preliminary health analysis "
+"before your visit."
+msgstr ""
+"તમારી મુલાકાત પહેલાં પ્રાથમિક સ્વાસ્થ્ય વિશ્લેષણ મેળવવા માટે "
+"અમારા AI-સંચાલિત લક્ષણ તપાસકનો ઉપયોગ કરો."
+
+#: .\core\templates\core\hospital_detail.html:473
+msgid "Check Symptoms Now"
+msgstr "હવે લક્ષણો તપાસો"
+
+#: .\core\templates\core\lab_report.html:789
+msgid "Understand Your<br>Lab Report Instantly"
+msgstr "તમારો <br>લેબ રિપોર્ટ તરત સમજો"
+
+#: .\core\templates\core\lab_report.html:790
+msgid ""
+"Upload your lab report and get a clear, plain-English explanation — what "
+"each value means, what's normal, and what conditions it might indicate."
+msgstr ""
+"તમારો લેબ રિપોર્ટ અપલોડ કરો અને સ્પષ્ટ, સરળ ભાષામાં સ્પષ્ટીકરણ મેળવો — "
+"દરેક મૂલ્ય શું અર્થ ધરાવે છે, શું સામાન્ય છે, અને તે કઈ સ્થિતિ સૂચવી શકે."
+
+#: .\core\templates\core\lab_report.html:805
+msgid "Drop your lab report here"
+msgstr "અહીં તમારો લેબ રિપોર્ટ ડ્રોપ કરો"
+
+#: .\core\templates\core\lab_report.html:806
+msgid "or click to browse"
+msgstr "અથવા બ્રાઉઝ કરવા ક્લિક કરો"
+
+#: .\core\templates\core\lab_report.html:848
+msgid "Analyze Report"
+msgstr "રિપોર્ટ વિશ્લેષણ કરો"
+
+#: .\core\templates\core\lab_report.html:856
+msgid "Gemini is reading your report"
+msgstr "Gemini તમારો રિપોર્ટ વાંચી રહ્યું છે"
+
+#: .\core\templates\core\lab_report.html:859
+msgid "This may take 10-20 seconds"
+msgstr "આ 10-20 સેકન્ડ લઈ શકે છે"
+
+#: .\core\templates\core\lab_report.html:880
+msgid "Overall Summary"
+msgstr "એકંદર સારાંશ"
+
+#: .\core\templates\core\lab_report.html:898
+msgid "Test Parameters"
+msgstr "પરીક્ષણ પ્રમાણો"
+
+#: .\core\templates\core\lab_report.html:899
+msgid "Each value explained in simple language"
+msgstr "દરેક મૂલ્ય સરળ ભાષામાં સ્પષ્ટ કરવામાં આવ્યું"
+
+#: .\core\templates\core\lab_report.html:920
+#: .\core\templates\core\partials\results.html:82
+msgid "Possible Conditions"
+msgstr "સંભવિત સ્થિતિઓ"
+
+#: .\core\templates\core\lab_report.html:921
+msgid "What these results might indicate"
+msgstr "આ પરિણામો શું સૂચવી શકે"
+
+#: .\core\templates\core\lab_report.html:940
+msgid "What To Do Next"
+msgstr "આગળ શું કરવું"
+
+#: .\core\templates\core\lab_report.html:941
+msgid "Recommended next steps"
+msgstr "ભલામણ કરેલ આગળના પગલાં"
+
+#: .\core\templates\core\lab_report.html:959
+msgid ""
+"This analysis is AI-generated for informational purposes only. Please "
+"consult a qualified doctor."
+msgstr ""
+"આ વિશ્લેષણ માત્ર માહિતી માટે AI દ્વારા જનરેટ કરવામાં આવ્યું છે. "
+"કૃપા કરીને લાયક ડોક્ટરની સલાહ લો."
+
+#: .\core\templates\core\lab_report.html:978
+msgid "Past Analyses"
+msgstr "ભૂતકાળના વિશ્લેષણ"
+
+#: .\core\templates\core\lab_report.html:979
+msgid "Last 3 months"
+msgstr "છેલ્લા 3 મહિના"
+
+#: .\core\templates\core\lab_report.html:1019
+msgid "Upload your first lab report to get started!"
+msgstr "શરૂ કરવા માટે તમારો પ્રથમ લેબ રિપોર્ટ અપલોડ કરો!"
+
+#: .\core\templates\core\partials\hero.html:513
+msgid "AI-Powered Healthcare"
+msgstr "AI-સંચાલિત આરોગ્ય સેવા"
+
+#: .\core\templates\core\partials\hero.html:517
+msgid ""
+"Find the right care,<br>\n"
+"          <strong>right when</strong> you need it"
+msgstr ""
+"યોગ્ય સંભાળ શોધો,<br>\n"
+"          <strong>બરાબર ત્યારે</strong> જ્યારે તમને જરૂર હોય"
+
+#: .\core\templates\core\partials\hero.html:522
+msgid ""
+"Describe your symptoms and get instant recommendations for nearby "
+"specialists, hospitals, and estimated treatment costs."
+msgstr ""
+"તમારા લક્ષણો વર્ણવો અને નજીકના નિષ્ણાતો, હોસ્પિટલો "
+"અને અંદાજિત સારવાર ખર્ચ માટે તાત્કાલિક ભલામણ મેળવો."
+
+#: .\core\templates\core\partials\hero.html:532
+msgid "Find Care Now"
+msgstr "હવે સંભાળ શોધો"
+
+#: .\core\templates\core\partials\hero.html:540
+msgid "Browse Hospitals"
+msgstr "હોસ્પિટલો બ્રાઉઝ કરો"
+
+#: .\core\templates\core\partials\hero.html:550
+msgid "Free to use"
+msgstr "ઉપયોગ માટે નિઃશુલ્ક"
+
+#: .\core\templates\core\partials\hero.html:558
+msgid "Instant results"
+msgstr "તાત્કાલિક પરિણામ"
+
+#: .\core\templates\core\partials\hero.html:566
+msgid "Real hospital data"
+msgstr "વાસ્તવિક હોસ્પિટલ ડેટા"
+
+#: .\core\templates\core\partials\hero.html:596
+#: .\core\templates\core\partials\results.html:63
+msgid "Location"
+msgstr "સ્થાન"
+
+#: .\core\templates\core\partials\hero.html:607
+msgid "Search"
+msgstr "શોધ"
+
+#: .\core\templates\core\partials\hero.html:618
+msgid "Ratings"
+msgstr "રેટિંગ"
+
+#: .\core\templates\core\partials\hero.html:641
+msgid "Costs"
+msgstr "ખર્ચ"
+
+#: .\core\templates\core\partials\main_form.html:485
+#: .\core\templates\core\partials\main_form.html:587
+msgid "AI Analysis"
+msgstr "AI વિશ્લેષણ"
+
+#: .\core\templates\core\partials\main_form.html:487
+msgid "Start your <strong>health journey</strong>"
+msgstr "તમારી <strong>સ્વાસ્થ્ય યાત્રા</strong> શરૂ કરો"
+
+#: .\core\templates\core\partials\main_form.html:488
+msgid "Tell us what you're experiencing"
+msgstr "તમે શું અનુભવ કરી રહ્યા છો તે અમને જણાવો"
+
+#: .\core\templates\core\partials\main_form.html:507
+msgid "Describe your symptoms"
+msgstr "તમારા લક્ષણો વર્ણવો"
+
+#: .\core\templates\core\partials\main_form.html:508
+msgid ""
+"E.g., I have had a severe high fever for 3 days with joint pain and nausea…"
+msgstr ""
+"દા.ત., મને 3 દિવસથી સાંધાના દુઃખાવા અને ઉબકા સાથે તીવ્ર તાવ છે…"
+
+#: .\core\templates\core\partials\main_form.html:513
+msgid "Your location"
+msgstr "તમારું સ્થાન"
+
+#: .\core\templates\core\partials\main_form.html:539
+msgid "Analyze & Find Hospitals"
+msgstr "વિશ્લેષણ કરો અને હોસ્પિટલ શોધો"
+
+#: .\core\templates\core\partials\main_form.html:548
+msgid "Analyzing…"
+msgstr "વિશ્લેષણ કરી રહ્યા છીએ…"
+
+#: .\core\templates\core\partials\main_form.html:561
+msgid "Process"
+msgstr "પ્રક્રિયા"
+
+#: .\core\templates\core\partials\main_form.html:562
+msgid "How it <strong>works</strong>"
+msgstr "તે કેવી રીતે <strong>કામ કરે છે</strong>"
+
+#: .\core\templates\core\partials\main_form.html:576
+msgid "Input Symptoms"
+msgstr "લક્ષણો દાખલ કરો"
+
+#: .\core\templates\core\partials\main_form.html:577
+msgid ""
+"Describe what you're feeling in plain language — no medical jargon required."
+msgstr ""
+"તમે શું અનુભવ કરો છો તે સરળ ભાષામાં વર્ણવો — કોઈ તબીબી પરિભાષા જરૂરી નથી."
+
+#: .\core\templates\core\partials\main_form.html:588
+msgid ""
+"Our AI identifies potential causes and the right specialist type for your "
+"condition."
+msgstr ""
+"અમારું AI તમારી સ્થિતિ માટે સંભવિત કારણો અને યોગ્ય નિષ્ણાત પ્રકાર ઓળખે છે."
+
+#: .\core\templates\core\partials\main_form.html:599
+msgid "Get Recommendations"
+msgstr "ભલામણ મેળવો"
+
+#: .\core\templates\core\partials\main_form.html:600
+msgid "See nearby hospitals ranked by rating, with estimated treatment costs."
+msgstr "રેટિંગ પ્રમાણે ક્રમ આપેલ નજીકની હોસ્પિટલો, અંદાજિત સારવાર ખર્ચ સાથે જુઓ."
+
+#: .\core\templates\core\partials\results.html:10
+msgid "New Search"
+msgstr "નવી શોધ"
+
+#: .\core\templates\core\partials\results.html:19
+msgid "Recommended Hospitals"
+msgstr "ભલામણ કરેલ હોસ્પિટલો"
+
+#: .\core\templates\core\partials\results.html:28
+msgid "Government"
+msgstr "સરકારી"
+
+#: .\core\templates\core\partials\results.html:29
+msgid "Trust"
+msgstr "ટ્રસ્ટ"
+
+#: .\core\templates\core\partials\results.html:30
+msgid "Private"
+msgstr "ખાનગી"
+
+#: .\core\templates\core\partials\results.html:31
+msgid "Premium"
+msgstr "પ્રીમિયમ"
+
+#: .\core\templates\core\partials\results.html:49
+msgid "Your Search"
+msgstr "તમારી શોધ"
+
+#: .\core\templates\core\partials\results.html:50
+msgid "Analysis Summary"
+msgstr "વિશ્લેષણ સારાંશ"
+
+#: .\core\templates\core\partials\results.html:56
+msgid "Symptoms"
+msgstr "લક્ષણો"
+
+#: .\core\templates\core\partials\results.html:72
+msgid "Recommended Specialist"
+msgstr "ભલામણ કરેલ નિષ્ણાત"
+
+#: .\core\templates\core\partials\results.html:77
+msgid "Urgency Level"
+msgstr "તાકીદ સ્તર"
+

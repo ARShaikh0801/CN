@@ -1,20 +1,33 @@
-{% load static %}
+{% load static i18n lang_utils %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CareNavigator — AI Healthcare Assistant</title>
   <link href="{% static 'css/output.css' %}" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Latin fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <!-- Indian script fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Noto+Sans+Gujarati:wght@300;400;500;600&family=Noto+Sans+Gurmukhi:wght@300;400;500;600&family=Noto+Sans+Bengali:wght@300;400;500;600&family=Noto+Sans+Tamil:wght@300;400;500;600&family=Noto+Sans+Telugu:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --sky: #38bdf8;
-      --sky-dim: rgba(56,189,248,0.12);
+      --sky-dim: rgba(56, 189, 248, 0.12);
       --ink: #0f0f0f;
       --ink-2: #1c1c1a;
       --muted: #6b7280;
@@ -26,10 +39,12 @@
       --red-soft: #fee2e2;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'DM Sans', 'Hind', 'Noto Sans', sans-serif;
       background: #f7f7f5;
       color: var(--ink-2);
       min-height: 100vh;
@@ -38,16 +53,106 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* ── LANGUAGE SWITCHER ──────────────────────── */
+    .lang-switcher {
+      position: relative;
+      margin-left: 12px;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-family: 'DM Sans', 'Hind', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .lang-btn:hover {
+      background: var(--border);
+      color: var(--ink);
+    }
+
+    .lang-btn svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+    }
+
+    .lang-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      min-width: 150px;
+      overflow: hidden;
+      z-index: 200;
+    }
+
+    .lang-switcher.open .lang-dropdown {
+      display: block;
+    }
+
+    .lang-dropdown form {
+      display: contents;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', 'Hind', 'Noto Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink-2);
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.12s;
+    }
+
+    .lang-option:hover {
+      background: var(--surface);
+    }
+
+    .lang-option.active {
+      font-weight: 600;
+      color: var(--ink);
+      background: var(--sky-dim);
+    }
+
+    .lang-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
     /* ── HEADER ─────────────────────────────────── */
     .site-header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(255,255,255,0.85);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
+
     .header-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -66,6 +171,7 @@
       gap: 10px;
       text-decoration: none;
     }
+
     .logo-mark {
       width: 34px;
       height: 34px;
@@ -77,14 +183,24 @@
       flex-shrink: 0;
       transition: transform 0.15s;
     }
-    .logo-link:hover .logo-mark { transform: scale(1.05); }
-    .logo-mark svg { width: 16px; height: 16px; color: var(--sky); }
+
+    .logo-link:hover .logo-mark {
+      transform: scale(1.05);
+    }
+
+    .logo-mark svg {
+      width: 16px;
+      height: 16px;
+      color: var(--sky);
+    }
+
     .logo-name {
       font-size: 18px;
       font-weight: 600;
       color: var(--ink);
       letter-spacing: -0.03em;
     }
+
     .logo-name span {
       font-weight: 300;
       color: var(--muted);
@@ -96,6 +212,7 @@
       align-items: center;
       gap: 2px;
     }
+
     .nav-link {
       display: flex;
       align-items: center;
@@ -108,18 +225,27 @@
       text-decoration: none;
       transition: background 0.15s, color 0.15s;
     }
-    .nav-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    .nav-link svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
     .nav-link:hover {
       background: var(--surface);
       color: var(--ink);
     }
+
     .nav-link.active {
       background: var(--ink);
       color: #fff;
     }
 
     /* ── MAIN ────────────────────────────────────── */
-    main { flex: 1; }
+    main {
+      flex: 1;
+    }
 
     /* ── FOOTER ──────────────────────────────────── */
     .site-footer {
@@ -128,6 +254,7 @@
       padding: 40px 32px;
       margin-top: 80px;
     }
+
     .footer-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -136,11 +263,13 @@
       align-items: center;
       gap: 16px;
     }
+
     .footer-brand {
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .footer-mark {
       width: 28px;
       height: 28px;
@@ -150,13 +279,20 @@
       align-items: center;
       justify-content: center;
     }
-    .footer-mark svg { width: 13px; height: 13px; color: var(--sky); }
+
+    .footer-mark svg {
+      width: 13px;
+      height: 13px;
+      color: var(--sky);
+    }
+
     .footer-name {
       font-size: 14px;
       font-weight: 600;
       color: var(--ink);
       letter-spacing: -0.02em;
     }
+
     .footer-disclaimer {
       font-size: 14px;
       color: var(--muted-2);
@@ -164,7 +300,12 @@
       max-width: 480px;
       line-height: 1.7;
     }
-    .footer-disclaimer strong { color: var(--muted); font-weight: 500; }
+
+    .footer-disclaimer strong {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
     .footer-mono {
       font-family: 'DM Mono', monospace;
       font-size: 12px;
@@ -179,6 +320,7 @@
       right: 24px;
       z-index: 9999;
     }
+
     .emergency-trigger {
       position: relative;
       display: flex;
@@ -193,18 +335,30 @@
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
       letter-spacing: -0.01em;
     }
+
     .emergency-trigger:hover {
       background: #1f1f1f;
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.24);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.24);
     }
-    .emergency-trigger:active { transform: translateY(0); }
-    .emergency-trigger svg { width: 15px; height: 15px; color: #f87171; }
-    .emergency-trigger .label { display: inline; }
+
+    .emergency-trigger:active {
+      transform: translateY(0);
+    }
+
+    .emergency-trigger svg {
+      width: 15px;
+      height: 15px;
+      color: #f87171;
+    }
+
+    .emergency-trigger .label {
+      display: inline;
+    }
 
     /* Ping dot */
     .e-ping {
@@ -214,6 +368,7 @@
       width: 10px;
       height: 10px;
     }
+
     .e-ping::before {
       content: '';
       position: absolute;
@@ -222,6 +377,7 @@
       border-radius: 50%;
       animation: e-ping-anim 1.8s ease-in-out infinite;
     }
+
     .e-ping::after {
       content: '';
       position: absolute;
@@ -229,9 +385,19 @@
       background: #ef4444;
       border-radius: 50%;
     }
+
     @keyframes e-ping-anim {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(2); opacity: 0; }
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(2);
+        opacity: 0;
+      }
     }
 
     /* ── MODAL ───────────────────────────────────── */
@@ -239,7 +405,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15,15,15,0.5);
+      background: rgba(15, 15, 15, 0.5);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 99999;
@@ -247,20 +413,31 @@
       justify-content: center;
       padding: 24px;
     }
-    .modal-overlay.open { display: flex; }
+
+    .modal-overlay.open {
+      display: flex;
+    }
 
     .modal {
       background: var(--white);
       border-radius: 20px;
       max-width: 400px;
       width: 100%;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
       border: 1px solid var(--border);
       animation: modal-in 0.2s ease;
     }
+
     @keyframes modal-in {
-      from { opacity: 0; transform: scale(0.96) translateY(8px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .modal-header {
@@ -270,11 +447,13 @@
       padding: 24px 24px 20px;
       border-bottom: 1px solid #f3f3f1;
     }
+
     .modal-title-group {
       display: flex;
       align-items: center;
       gap: 12px;
     }
+
     .modal-icon {
       width: 40px;
       height: 40px;
@@ -285,13 +464,20 @@
       align-items: center;
       justify-content: center;
     }
-    .modal-icon svg { width: 18px; height: 18px; color: var(--red); }
+
+    .modal-icon svg {
+      width: 18px;
+      height: 18px;
+      color: var(--red);
+    }
+
     .modal-title {
       font-size: 16px;
       font-weight: 600;
       color: var(--ink);
       letter-spacing: -0.02em;
     }
+
     .modal-close {
       width: 32px;
       height: 32px;
@@ -305,10 +491,23 @@
       color: var(--muted-2);
       transition: background 0.15s, color 0.15s;
     }
-    .modal-close:hover { background: var(--surface); color: var(--ink); }
-    .modal-close svg { width: 14px; height: 14px; }
 
-    .modal-body { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 10px; }
+    .modal-close:hover {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .modal-close svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .modal-body {
+      padding: 20px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
     .emergency-card {
       display: block;
@@ -318,21 +517,30 @@
       text-decoration: none;
       transition: border-color 0.15s, background 0.15s, transform 0.1s;
     }
-    .emergency-card:hover { transform: translateY(-1px); }
-    .emergency-card:active { transform: translateY(0); }
+
+    .emergency-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .emergency-card:active {
+      transform: translateY(0);
+    }
 
     .emergency-card.red {
       background: #fff5f5;
       border-color: #fecaca;
     }
+
     .emergency-card.red:hover {
       background: #fef2f2;
       border-color: #f87171;
     }
+
     .emergency-card.blue {
       background: #f0f9ff;
       border-color: #bae6fd;
     }
+
     .emergency-card.blue:hover {
       background: #e0f2fe;
       border-color: #7dd3fc;
@@ -346,14 +554,21 @@
       letter-spacing: 0.1em;
       margin-bottom: 10px;
     }
-    .emergency-card.red .ec-label { color: #f87171; }
-    .emergency-card.blue .ec-label { color: #38bdf8; }
+
+    .emergency-card.red .ec-label {
+      color: #f87171;
+    }
+
+    .emergency-card.blue .ec-label {
+      color: #38bdf8;
+    }
 
     .ec-number-row {
       display: flex;
       align-items: center;
       gap: 12px;
     }
+
     .ec-num-icon {
       width: 38px;
       height: 38px;
@@ -363,9 +578,21 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .emergency-card.red .ec-num-icon { background: #dc2626; }
-    .emergency-card.blue .ec-num-icon { background: #0ea5e9; }
-    .ec-num-icon svg { width: 16px; height: 16px; color: #fff; }
+
+    .emergency-card.red .ec-num-icon {
+      background: #dc2626;
+    }
+
+    .emergency-card.blue .ec-num-icon {
+      background: #0ea5e9;
+    }
+
+    .ec-num-icon svg {
+      width: 16px;
+      height: 16px;
+      color: #fff;
+    }
+
     .ec-number {
       font-family: 'DM Mono', monospace;
       font-size: 28px;
@@ -373,8 +600,14 @@
       letter-spacing: -0.03em;
       line-height: 1;
     }
-    .emergency-card.red .ec-number { color: #991b1b; }
-    .emergency-card.blue .ec-number { color: #075985; }
+
+    .emergency-card.red .ec-number {
+      color: #991b1b;
+    }
+
+    .emergency-card.blue .ec-number {
+      color: #075985;
+    }
 
     .modal-note {
       display: flex;
@@ -385,21 +618,46 @@
       border-radius: 10px;
       margin-top: 2px;
     }
-    .modal-note svg { width: 13px; height: 13px; color: #d97706; flex-shrink: 0; margin-top: 1px; }
+
+    .modal-note svg {
+      width: 13px;
+      height: 13px;
+      color: #d97706;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
     .modal-note p {
       font-size: 11px;
       color: #92400e;
       line-height: 1.6;
     }
-    .modal-note strong { font-weight: 600; }
+
+    .modal-note strong {
+      font-weight: 600;
+    }
 
     /* ── RESPONSIVE ──────────────────────────────── */
     @media (max-width: 640px) {
-      .header-inner { padding: 0 20px; }
-      .nav-link .nav-label { display: none; }
-      .emergency-trigger .label { display: none; }
-      .emergency-trigger { padding: 12px 14px; }
-      .site-footer { padding: 32px 20px; }
+      .header-inner {
+        padding: 0 20px;
+      }
+
+      .nav-link .nav-label {
+        display: none;
+      }
+
+      .emergency-trigger .label {
+        display: none;
+      }
+
+      .emergency-trigger {
+        padding: 12px 14px;
+      }
+
+      .site-footer {
+        padding: 32px 20px;
+      }
     }
   </style>
   {% block extra_css %}{% endblock %}
@@ -413,20 +671,76 @@
 
       <a href="{% url 'index' %}" class="logo-link">
         <div class="logo-mark">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
         </div>
         <span class="logo-name">Care<span>Navigator</span></span>
       </a>
 
       <nav class="site-nav">
         <a href="{% url 'index' %}" class="nav-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <span class="nav-label">Home</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          <span class="nav-label">{% trans "Home" %}</span>
         </a>
         <a href="{% url 'all_hospitals' %}" class="nav-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="nav-label">Hospitals</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <path d="M3 9h18M9 21V9" />
+          </svg>
+          <span class="nav-label">{% trans "Hospitals" %}</span>
         </a>
+        <a href="{% url 'lab_report' %}" class="nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18" />
+          </svg>
+          <span class="nav-label">{% trans "Lab Report" %}</span>
+        </a>
+
+        <!-- ── LANGUAGE SWITCHER ── -->
+        <div class="lang-switcher" id="langSwitcher">
+          <button class="lang-btn" id="langBtn" aria-label="{% trans 'Select language' %}" aria-haspopup="true"
+            aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            {% get_current_language as CURRENT_LANG %}
+            {% get_available_languages as LANGUAGES_LIST %}
+            {% for lang_code, lang_name in LANGUAGES_LIST %}{% if lang_code == CURRENT_LANG %}{{ lang_name }}
+            {% endif %}{% endfor %}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:10px;">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            {% get_current_language as CURRENT_LANG %}
+            {% get_available_languages as LANGUAGES_LIST %}
+            {% path_without_lang_prefix as safe_next %}
+            {% for lang_code, lang_name in LANGUAGES_LIST %}
+            <form action="/i18n/setlang/" method="post" style="margin:0;">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="{{ lang_code }}">
+              <input type="hidden" name="next" value="{{ safe_next }}">
+              <button type="submit" class="lang-option{% if lang_code == CURRENT_LANG %} active{% endif %}">
+                {{ lang_name }}
+              </button>
+            </form>
+            {% if not forloop.last %}<div class="lang-divider"></div>{% endif %}
+            {% endfor %}
+          </div>
+        </div>
       </nav>
 
     </div>
@@ -442,13 +756,15 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="footer-mark">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
         </div>
         <span class="footer-name">CareNavigator</span>
       </div>
       <p class="footer-disclaimer">
-        <strong>Disclaimer:</strong> AI-generated results are for informational purposes only.
-        Always consult a medical professional for emergencies and health decisions.
+        <strong>{% trans "Disclaimer:" %}</strong> {% trans "AI-generated results are for informational purposes only. Always consult a medical professional for emergencies and health decisions." %}
       </p>
       <span class="footer-mono">© {% now "Y" %} CareNavigator</span>
     </div>
@@ -456,10 +772,17 @@
 
   <!-- ── EMERGENCY FAB ── -->
   <div class="emergency-fab">
-    <button class="emergency-trigger" id="emergencyBtn" aria-label="Emergency services">
+    <button class="emergency-trigger" id="emergencyBtn" aria-label="{% trans 'Emergency services' %}">
       <span class="e-ping"></span>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M5 9h4M7 7v4"/></svg>
-      <span class="label">Emergency</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="3" width="15" height="13" rx="1" />
+        <path d="M16 8h4l3 3v5h-7V8z" />
+        <circle cx="5.5" cy="18.5" r="2.5" />
+        <circle cx="18.5" cy="18.5" r="2.5" />
+        <path d="M5 9h4M7 7v4" />
+      </svg>
+      <span class="label">{% trans "Emergency" %}</span>
     </button>
   </div>
 
@@ -470,40 +793,65 @@
       <div class="modal-header">
         <div class="modal-title-group">
           <div class="modal-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M5 9h4M7 7v4"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13" rx="1" />
+              <path d="M16 8h4l3 3v5h-7V8z" />
+              <circle cx="5.5" cy="18.5" r="2.5" />
+              <circle cx="18.5" cy="18.5" r="2.5" />
+              <path d="M5 9h4M7 7v4" />
+            </svg>
           </div>
-          <span class="modal-title" id="modalTitle">Emergency Services</span>
+          <span class="modal-title" id="modalTitle">{% trans "Emergency Services" %}</span>
         </div>
-        <button class="modal-close" id="closeModal" aria-label="Close">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <button class="modal-close" id="closeModal" aria-label="{% trans 'Close' %}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
       </div>
 
       <div class="modal-body">
 
         <a href="tel:108" class="emergency-card red">
-          <div class="ec-label">National Emergency Ambulance</div>
+          <div class="ec-label">{% trans "National Emergency Ambulance" %}</div>
           <div class="ec-number-row">
             <div class="ec-num-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
             </div>
             <span class="ec-number">108</span>
           </div>
         </a>
 
         <a href="tel:100" class="emergency-card blue">
-          <div class="ec-label">Police Emergency</div>
+          <div class="ec-label">{% trans "Police Emergency" %}</div>
           <div class="ec-number-row">
             <div class="ec-num-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
             </div>
             <span class="ec-number">100</span>
           </div>
         </a>
 
         <div class="modal-note">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <p>For life-threatening emergencies, call <strong>108</strong> immediately. You can also contact hospitals directly for ambulance services.</p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <p>{% trans "For life-threatening emergencies, call" %} <strong>108</strong> {% trans "immediately. You can
+            also contact hospitals directly for ambulance services." %}</p>
         </div>
 
       </div>
@@ -524,6 +872,24 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') modal.classList.remove('open');
     });
+
+    // Language switcher toggle
+    const langSwitcher = document.getElementById('langSwitcher');
+    const langBtn = document.getElementById('langBtn');
+    if (langBtn && langSwitcher) {
+      langBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = langSwitcher.classList.toggle('open');
+        langBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+      document.addEventListener('click', (e) => {
+        if (!langSwitcher.contains(e.target)) {
+          langSwitcher.classList.remove('open');
+          langBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
   </script>
 </body>
+
 </html>

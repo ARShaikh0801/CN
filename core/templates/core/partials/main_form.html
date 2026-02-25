@@ -1,3 +1,4 @@
+{% load i18n %}
 <style>
   /* ── MAIN FORM SECTION ───────────────────────────────────────────────── */
   #main-form {
@@ -17,12 +18,13 @@
     border: 1px solid #e9e9e7;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
     transition: box-shadow 0.2s;
   }
+
   .form-card:focus-within {
-    box-shadow: 0 8px 40px rgba(56,189,248,0.1), 0 4px 16px rgba(0,0,0,0.06);
-    border-color: rgba(56,189,248,0.2);
+    box-shadow: 0 8px 40px rgba(56, 189, 248, 0.1), 0 4px 16px rgba(0, 0, 0, 0.06);
+    border-color: rgba(56, 189, 248, 0.2);
   }
 
   /* Card header */
@@ -32,6 +34,7 @@
     position: relative;
     overflow: hidden;
   }
+
   .form-header::before {
     content: '';
     position: absolute;
@@ -39,9 +42,10 @@
     right: -40px;
     width: 180px;
     height: 180px;
-    background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
     pointer-events: none;
   }
+
   .form-header-label {
     display: inline-flex;
     align-items: center;
@@ -54,6 +58,7 @@
     color: #38bdf8;
     margin-bottom: 10px;
   }
+
   .form-header-dot {
     width: 5px;
     height: 5px;
@@ -61,10 +66,19 @@
     border-radius: 50%;
     animation: fh-pulse 2s ease-in-out infinite;
   }
+
   @keyframes fh-pulse {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.3; }
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.3;
+    }
   }
+
   .form-header h3 {
     font-size: 20px;
     font-weight: 300;
@@ -74,7 +88,12 @@
     line-height: 1.2;
     position: relative;
   }
-  .form-header h3 strong { font-weight: 600; color: #38bdf8; }
+
+  .form-header h3 strong {
+    font-weight: 600;
+    color: #38bdf8;
+  }
+
   .form-header p {
     font-size: 14px;
     color: #969eac;
@@ -102,8 +121,18 @@
     font-size: 13px;
     color: #991b1b;
   }
-  .form-error.visible { display: flex; }
-  .form-error svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; color: #f87171; }
+
+  .form-error.visible {
+    display: flex;
+  }
+
+  .form-error svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: #f87171;
+  }
 
   /* Field */
   .form-field label {
@@ -132,17 +161,22 @@
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   }
-  .form-textarea::placeholder { color: #99a2ac; }
+
+  .form-textarea::placeholder {
+    color: #99a2ac;
+  }
+
   .form-textarea:focus {
     border-color: #38bdf8;
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
   }
 
   /* Select wrap */
   .select-wrap {
     position: relative;
   }
+
   .select-wrap svg.select-left {
     position: absolute;
     left: 14px;
@@ -154,6 +188,7 @@
     pointer-events: none;
     z-index: 1;
   }
+
   .select-wrap svg.select-right {
     position: absolute;
     right: 12px;
@@ -164,6 +199,7 @@
     color: #9ca3af;
     pointer-events: none;
   }
+
   .form-select {
     width: 100%;
     padding: 13px 40px 13px 40px;
@@ -179,10 +215,11 @@
     cursor: pointer;
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   }
+
   .form-select:focus {
     border-color: #38bdf8;
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
   }
 
   /* Submit button */
@@ -204,12 +241,18 @@
     transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
     letter-spacing: -0.01em;
   }
+
   .form-submit:hover {
     background: #1f1f1f;
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   }
-  .form-submit:active { transform: translateY(0); box-shadow: none; }
+
+  .form-submit:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
   .form-submit:disabled {
     background: #e5e5e3;
     border-color: #e5e5e3;
@@ -218,29 +261,48 @@
     transform: none;
     box-shadow: none;
   }
-  .form-submit svg { width: 15px; height: 15px; flex-shrink: 0; }
-  .form-submit .chevron { transition: transform 0.15s; }
-  .form-submit:hover .chevron { transform: translateX(3px); }
+
+  .form-submit svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  .form-submit .chevron {
+    transition: transform 0.15s;
+  }
+
+  .form-submit:hover .chevron {
+    transform: translateX(3px);
+  }
 
   /* Loader spinner */
   .btn-spinner {
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(255,255,255,0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     border-top-color: #ffffff;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
     flex-shrink: 0;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 
   /* ── HOW IT WORKS ── */
-  .hiw-section { margin-top: 0; }
+  .hiw-section {
+    margin-top: 0;
+  }
 
   .hiw-heading {
     text-align: center;
     margin-bottom: 40px;
   }
+
   .hiw-heading-label {
     display: inline-block;
     font-family: 'DM Mono', monospace;
@@ -251,6 +313,7 @@
     color: #81817e;
     margin-bottom: 12px;
   }
+
   .hiw-heading h3 {
     font-size: clamp(22px, 3vw, 30px);
     font-weight: 300;
@@ -258,7 +321,10 @@
     letter-spacing: -0.03em;
     margin: 0;
   }
-  .hiw-heading h3 strong { font-weight: 600; }
+
+  .hiw-heading h3 strong {
+    font-weight: 600;
+  }
 
   .hiw-grid {
     display: grid;
@@ -267,8 +333,18 @@
     max-width: 860px;
     margin: 0 auto;
   }
-  @media (min-width: 600px)  { .hiw-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 860px)  { .hiw-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  @media (min-width: 600px) {
+    .hiw-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 860px) {
+    .hiw-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
 
   .hiw-card {
     background: #ffffff;
@@ -282,6 +358,7 @@
     position: relative;
     overflow: hidden;
   }
+
   .hiw-card::before {
     content: attr(data-step);
     position: absolute;
@@ -293,9 +370,10 @@
     color: #9b9b99;
     letter-spacing: 0.04em;
   }
+
   .hiw-card:hover {
     border-color: #38bdf8;
-    box-shadow: 0 6px 28px rgba(56,189,248,0.09);
+    box-shadow: 0 6px 28px rgba(56, 189, 248, 0.09);
     transform: translateY(-2px);
   }
 
@@ -309,14 +387,38 @@
     flex-shrink: 0;
     border: 1px solid transparent;
   }
-  .hiw-icon svg { width: 20px; height: 20px; }
 
-  .hiw-icon.sky   { background: #f0f9ff; border-color: #bae6fd; }
-  .hiw-icon.sky   svg { color: #0ea5e9; }
-  .hiw-icon.green { background: #f0fdf4; border-color: #bbf7d0; }
-  .hiw-icon.green svg { color: #16a34a; }
-  .hiw-icon.purple{ background: #faf5ff; border-color: #e9d5ff; }
-  .hiw-icon.purple svg { color: #9333ea; }
+  .hiw-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .hiw-icon.sky {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+  }
+
+  .hiw-icon.sky svg {
+    color: #0ea5e9;
+  }
+
+  .hiw-icon.green {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+  }
+
+  .hiw-icon.green svg {
+    color: #16a34a;
+  }
+
+  .hiw-icon.purple {
+    background: #faf5ff;
+    border-color: #e9d5ff;
+  }
+
+  .hiw-icon.purple svg {
+    color: #9333ea;
+  }
 
   .hiw-card h4 {
     font-size: 16px;
@@ -325,6 +427,7 @@
     letter-spacing: -0.02em;
     margin: 0;
   }
+
   .hiw-card p {
     font-size: 14px;
     color: #828a97;
@@ -335,7 +438,10 @@
 
   /* Connector line between cards (desktop) */
   @media (min-width: 860px) {
-    .hiw-grid { position: relative; }
+    .hiw-grid {
+      position: relative;
+    }
+
     .hiw-card:not(:last-child)::after {
       content: '';
       position: absolute;
@@ -349,9 +455,19 @@
   }
 
   @media (max-width: 640px) {
-    #main-form { padding: 40px 20px 60px; }
-    .form-header, .form-body { padding-left: 24px; padding-right: 24px; }
-    .hiw-card:last-child { grid-column: 1 / -1; }
+    #main-form {
+      padding: 40px 20px 60px;
+    }
+
+    .form-header,
+    .form-body {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .hiw-card:last-child {
+      grid-column: 1 / -1;
+    }
   }
 </style>
 
@@ -366,10 +482,10 @@
       <div class="form-header">
         <div class="form-header-label">
           <span class="form-header-dot"></span>
-          AI Analysis
+          {% trans "AI Analysis" %}
         </div>
-        <h3>Start your <strong>health journey</strong></h3>
-        <p>Tell us what you're experiencing</p>
+        <h3>{% blocktrans %}Start your <strong>health journey</strong>{% endblocktrans %}</h3>
+        <p>{% trans "Tell us what you're experiencing" %}</p>
       </div>
 
       <!-- Body -->
@@ -377,50 +493,64 @@
 
         <!-- Error -->
         <div id="error-message" class="form-error">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
           <span></span>
         </div>
 
         <!-- Symptoms -->
         <div class="form-field">
-          <label>Describe your symptoms</label>
-          <textarea
-            id="symptoms-input"
-            class="form-textarea"
-            rows="4"
-            placeholder="E.g., I have had a severe high fever for 3 days with joint pain and nausea…"
-          ></textarea>
+          <label>{% trans "Describe your symptoms" %}</label>
+          <textarea id="symptoms-input" class="form-textarea" rows="4" placeholder="{% trans 'E.g., I have had a severe high fever for 3 days with joint pain and nausea…' %}"></textarea>
         </div>
 
         <!-- Location -->
         <div class="form-field">
-          <label>Your location</label>
+          <label>{% trans "Your location" %}</label>
           <div class="select-wrap">
-            <svg class="select-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <svg class="select-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
             <select id="city-input" class="form-select">
               <option value="Ahmedabad">Ahmedabad</option>
               <option value="Gandhinagar">Gandhinagar</option>
             </select>
-            <svg class="select-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg class="select-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
           </div>
         </div>
 
         <!-- Submit -->
         <button id="analyze-btn" class="form-submit">
           <span id="btn-text" style="display:flex;align-items:center;gap:8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            Analyze &amp; Find Hospitals
-            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            {% trans "Analyze & Find Hospitals" %}
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
           </span>
           <span id="btn-loader" style="display:none;align-items:center;gap:8px;">
             <span class="btn-spinner"></span>
-            Analyzing…
+            {% trans "Analyzing…" %}
           </span>
         </button>
         <p class="warning-disclaimer">
-        <strong>Disclaimer:</strong> AI-generated results are for informational purposes only.
-        Always consult a medical professional for emergencies and health decisions.
-      </p>
+          <strong>{% trans "Disclaimer:" %}</strong> {% trans "AI-generated results are for informational purposes only. Always consult a medical professional for emergencies and health decisions." %}
+        </p>
       </div>
     </div>
   </div>
@@ -428,34 +558,46 @@
   <!-- ── HOW IT WORKS ── -->
   <div class="hiw-section">
     <div class="hiw-heading">
-      <span class="hiw-heading-label">Process</span>
-      <h3>How it <strong>works</strong></h3>
+      <span class="hiw-heading-label">{% trans "Process" %}</span>
+      <h3>{% blocktrans %}How it <strong>works</strong>{% endblocktrans %}</h3>
     </div>
 
     <div class="hiw-grid">
 
       <div class="hiw-card" data-step="01">
         <div class="hiw-icon sky">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/><path d="M12 7v4M10 9h4"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <path d="M9 22V12h6v10" />
+            <path d="M12 7v4M10 9h4" />
+          </svg>
         </div>
-        <h4>Input Symptoms</h4>
-        <p>Describe what you're feeling in plain language — no medical jargon required.</p>
+        <h4>{% trans "Input Symptoms" %}</h4>
+        <p>{% trans "Describe what you're feeling in plain language — no medical jargon required." %}</p>
       </div>
 
       <div class="hiw-card" data-step="02">
         <div class="hiw-icon purple">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
         </div>
-        <h4>AI Analysis</h4>
-        <p>Our AI identifies potential causes and the right specialist type for your condition.</p>
+        <h4>{% trans "AI Analysis" %}</h4>
+        <p>{% trans "Our AI identifies potential causes and the right specialist type for your condition." %}</p>
       </div>
 
       <div class="hiw-card" data-step="03">
         <div class="hiw-icon green">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <path d="M3 9h18M9 21V9" />
+          </svg>
         </div>
-        <h4>Get Recommendations</h4>
-        <p>See nearby hospitals ranked by rating, with estimated treatment costs.</p>
+        <h4>{% trans "Get Recommendations" %}</h4>
+        <p>{% trans "See nearby hospitals ranked by rating, with estimated treatment costs." %}</p>
       </div>
 
     </div>

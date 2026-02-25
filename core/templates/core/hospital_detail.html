@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load static i18n %}
 {% load custom_filters %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/hospital_detail.css' %}">
@@ -18,7 +18,7 @@
           stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6" />
         </svg>
-        All Hospitals
+        {% trans "All Hospitals" %}
       </a>
 
       <div class="dpage-hero-row">
@@ -57,7 +57,7 @@
               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="3 11 22 2 13 21 11 13 3 11" />
             </svg>
-            Get Directions
+            {% trans "Get Directions" %}
           </a>
           {% endif %}
           <button class="dpage-btn-share"
@@ -70,7 +70,7 @@
               <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
               <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
             </svg>
-            Share
+            {% trans "Share" %}
           </button>
         </div>
       </div>
@@ -95,8 +95,8 @@
               </svg>
             </div>
             <div>
-              <h3 class="sec-title">Medical Specialities</h3>
-              <p class="sec-sub">Available departments and services</p>
+              <h3 class="sec-title">{% trans "Medical Specialities" %}</h3>
+              <p class="sec-sub">{% trans "Available departments and services" %}</p>
             </div>
           </div>
 
@@ -117,7 +117,7 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            <p>No specific specialities listed.</p>
+            <p>{% trans "No specific specialities listed." %}</p>
           </div>
           {% endif %}
         </div>
@@ -133,12 +133,12 @@
               </svg>
             </div>
             <div>
-              <h3 class="sec-title">Facilities &amp; Equipment</h3>
-              <p class="sec-sub">Available infrastructure and services</p>
+              <h3 class="sec-title">{% trans "Facilities & Equipment" %}</h3>
+              <p class="sec-sub">{% trans "Available infrastructure and services" %}</p>
             </div>
           </div>
 
-          <span class="sec-label">Bed Capacity</span>
+          <span class="sec-label">{% trans "Bed Capacity" %}</span>
           <div class="bed-grid">
             <div class="bed-box blue">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -146,7 +146,7 @@
                 <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 16h20M6 8v8" />
               </svg>
               <div class="bed-val">{{ hospital.total_beds }}</div>
-              <div class="bed-lbl">Total Beds</div>
+              <div class="bed-lbl">{% trans "Total Beds" %}</div>
             </div>
             <div class="bed-box red">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -154,7 +154,7 @@
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
               </svg>
               <div class="bed-val">{{ hospital.icu_beds }}</div>
-              <div class="bed-lbl">ICU Beds</div>
+              <div class="bed-lbl">{% trans "ICU Beds" %}</div>
             </div>
             <div class="bed-box orange">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -165,11 +165,11 @@
                 <circle cx="18.5" cy="18.5" r="2.5" />
               </svg>
               <div class="bed-val">{{ hospital.emergency_beds }}</div>
-              <div class="bed-lbl">Emergency</div>
+              <div class="bed-lbl">{% trans "Emergency" %}</div>
             </div>
           </div>
 
-          <span class="sec-label" style="margin-top:8px;">Diagnostic Equipment</span>
+          <span class="sec-label" style="margin-top:8px;">{% trans "Diagnostic Equipment" %}</span>
           <div class="facility-grid" style="margin-bottom:16px;">
             <div class="facility-item {% if facilities.xray %}on{% else %}off{% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -178,7 +178,7 @@
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
               </svg>
-              X-Ray
+              {% trans "X-Ray" %}
             </div>
             <div class="facility-item {% if facilities.mri %}on{% else %}off{% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -187,7 +187,7 @@
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
               </svg>
-              MRI
+              {% trans "MRI" %}
             </div>
             <div class="facility-item {% if facilities.ct_scan %}on{% else %}off{% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -196,7 +196,7 @@
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
               </svg>
-              CT Scan
+              {% trans "CT Scan" %}
             </div>
             <div class="facility-item {% if facilities.ultrasound %}on{% else %}off{% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -205,11 +205,11 @@
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
               </svg>
-              Ultrasound
+              {% trans "Ultrasound" %}
             </div>
           </div>
 
-          <span class="sec-label">Services</span>
+          <span class="sec-label">{% trans "Services" %}</span>
           <div class="facility-grid">
             <div class="facility-item {% if facilities.blood_bank %}on{% else %}off{% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -218,7 +218,7 @@
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
               </svg>
-              Blood Bank
+              {% trans "Blood Bank" %}
             </div>
             <div class="facility-item {% if facilities.laboratory %}on{% else %}off{% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -227,7 +227,7 @@
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
               </svg>
-              Laboratory
+              {% trans "Laboratory" %}
             </div>
             <div class="facility-item {% if facilities.pharmacy %}on{% else %}off{% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -236,7 +236,7 @@
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
               </svg>
-              Pharmacy
+              {% trans "Pharmacy" %}
             </div>
             <div class="facility-item {% if facilities.ambulance %}on{% else %}off{% endif %}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -245,7 +245,7 @@
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />{% endif %}
               </svg>
-              Ambulance
+              {% trans "Ambulance" %}
             </div>
           </div>
 
@@ -256,7 +256,7 @@
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
               </svg>
-              <span>Operation Theaters</span>
+              <span>{% trans "Operation Theaters" %}</span>
             </div>
             <span class="ot-val">{{ facilities.operation_theaters }}</span>
           </div>
@@ -276,8 +276,8 @@
               </svg>
             </div>
             <div>
-              <h3 class="sec-title">Medical Team</h3>
-              <p class="sec-sub">Our experienced doctors and specialists</p>
+              <h3 class="sec-title">{% trans "Medical Team" %}</h3>
+              <p class="sec-sub">{% trans "Our experienced doctors and specialists" %}</p>
             </div>
           </div>
 
@@ -289,7 +289,7 @@
               <div class="doctor-name-row">
                 <span class="doctor-name">Dr. {{ doctor.name }}</span>
                 {% if doctor.is_head_doctor %}
-                <span class="doctor-head">Head</span>
+                <span class="doctor-head">{% trans "Head" %}</span>
                 {% endif %}
               </div>
               <div class="doctor-spec">{{ doctor.specialization }}</div>
@@ -329,7 +329,7 @@
               <circle cx="12" cy="7" r="4" />
               <line x1="16" y1="3" x2="22" y2="9" />
             </svg>
-            <p>No doctor information available at this time.</p>
+            <p>{% trans "No doctor information available at this time." %}</p>
           </div>
           {% endif %}
         </div>
@@ -345,8 +345,8 @@
               </svg>
             </div>
             <div>
-              <h3 class="sec-title">Accepted Insurance &amp; Schemes</h3>
-              <p class="sec-sub">Payment methods and coverage</p>
+              <h3 class="sec-title">{% trans "Accepted Insurance & Schemes" %}</h3>
+              <p class="sec-sub">{% trans "Payment methods and coverage" %}</p>
             </div>
           </div>
 
@@ -388,7 +388,7 @@
               <path
                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.1 6.1l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
             </svg>
-            <p>Contact hospital directly for insurance and scheme details.</p>
+            <p>{% trans "Contact hospital directly for insurance and scheme details." %}</p>
           </div>
           {% endif %}
         </div>
@@ -401,8 +401,8 @@
         <!-- Contact Card -->
         <div class="contact-card">
           <div class="contact-header">
-            <span class="contact-header-label">Get in Touch</span>
-            <h4>Contact Information</h4>
+            <span class="contact-header-label">{% trans "Get in Touch" %}</span>
+            <h4>{% trans "Contact Information" %}</h4>
           </div>
           <div class="contact-body">
 
@@ -416,7 +416,7 @@
                 </svg>
               </div>
               <div>
-                <span class="contact-lbl">Emergency Line</span>
+                <span class="contact-lbl">{% trans "Emergency Line" %}</span>
                 <span class="contact-num">{{ hospital.contact }}</span>
               </div>
             </a>
@@ -435,7 +435,7 @@
                 </svg>
               </div>
               <div>
-                <span class="contact-lbl">Ambulance Service</span>
+                <span class="contact-lbl">{% trans "Ambulance Service" %}</span>
                 <span class="contact-num">{{ hospital.ambulance_contact }}</span>
               </div>
             </a>
@@ -450,7 +450,7 @@
                 </svg>
               </div>
               <div>
-                <span class="address-label">Full Address</span>
+                <span class="address-label">{% trans "Full Address" %}</span>
                 <p class="address-text">{{ hospital.address }}</p>
                 <span class="address-city">{{ hospital.city }} — {{ hospital.pincode }}</span>
               </div>
@@ -467,9 +467,10 @@
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>
           </div>
-          <h3>Need a Checkup?</h3>
-          <p>Use our AI-powered symptom checker to get a preliminary health analysis before your visit.</p>
-          <a href="{% url 'index' %}" class="cta-btn">Check Symptoms Now</a>
+          <h3>{% trans "Need a Checkup?" %}</h3>
+          <p>{% trans "Use our AI-powered symptom checker to get a preliminary health analysis before your visit." %}
+          </p>
+          <a href="{% url 'index' %}" class="cta-btn">{% trans "Check Symptoms Now" %}</a>
         </div>
 
       </div>

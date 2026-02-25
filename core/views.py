@@ -1,12 +1,27 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from core.models import Hospital
-from core.utils.gemini import analyze_symptoms as gemini_analyze
+from core.models import Hospital, LabReportHistory
+from core.utils.gemini import analyze_symptoms as gemini_analyze, analyze_lab_report as gemini_analyze_lab, translate_lab_result
 from core.utils.cost import compute_cost_range, format_cost_text
 from core.utils.speciality_mapper import normalize_speciality
+from django.utils.translation import get_language
 import json
 import re
+from django.utils import timezone
+from datetime import timedelta
+
+# Map Django language codes to human-readable names for Gemini prompts
+LANG_NAMES = {
+    'en': 'English',
+    'hi': 'Hindi',
+    'mr': 'Marathi',
+    'gu': 'Gujarati',
+    'pa': 'Punjabi',
+    'bn': 'Bengali',
+    'ta': 'Tamil',
+    'te': 'Telugu',
+}
 
 def index(request):
     return render(request, 'core/index.html')
@@ -21,9 +36,13 @@ def analyze_symptoms(request):
             
             if not symptoms_text:
                 return JsonResponse({'error': 'symptoms_text is required'}, status=400)
+            
+            # Detect active language and instruct Gemini to respond in it
+            lang_code = get_language() or 'en'
+            lang_name = LANG_NAMES.get(lang_code, 'English')
                 
-            analysis = gemini_analyze(symptoms_text, location)
-            return JsonResponse({'analysis': analysis})
+            analysis = gemini_analyze(symptoms_text, location, response_language=lang_name)
+            return JsonResponse({'analysis': analysis, 'response_language': lang_name})
         except Exception as e:
             print(f"Analyze error: {e}")
             return JsonResponse({'error': 'analysis failed'}, status=500)
@@ -98,81 +117,83 @@ def search_hospitals(request):
         return JsonResponse({'error': 'Failed to fetch hospitals'}, status=500)
 
 def all_hospitals(request):
-    try:
-        # Get filter parameters
-        city_filter = request.GET.get('city')
-        type_filter = request.GET.get('type')
-        rating_filter = request.GET.get('rating')
+    # Get filter parameters
+    city_filter = request.GET.get('city')
+    type_filter = request.GET.get('type')
+    rating_filter = request.GET.get('rating')
+    pincode_filter = request.GET.get('pincode')
 
-        hospitals = Hospital.objects.all()
+    hospitals = Hospital.objects.all()
 
-        if city_filter:
-            hospitals = hospitals.filter(city__iexact=city_filter)
+    if city_filter:
+        hospitals = hospitals.filter(city__iexact=city_filter)
+    
+    if type_filter:
+        hospitals = hospitals.filter(hospital_type__iexact=type_filter)
         
-        if type_filter:
-            hospitals = hospitals.filter(hospital_type__iexact=type_filter)
-            
-        if rating_filter:
-            try:
-                min_rating = float(rating_filter)
-                hospitals = hospitals.filter(rating__gte=min_rating)
-            except ValueError:
-                pass
+    if rating_filter:
+        try:
+            min_rating = float(rating_filter)
+            hospitals = hospitals.filter(rating__gte=min_rating)
+        except ValueError:
+            pass
 
+    if pincode_filter:
+        hospitals = hospitals.filter(pincode__exact=pincode_filter)
 
-        # Get unique values for filters
-        cities = Hospital.objects.values_list('city', flat=True).distinct().order_by('city')
-        types = Hospital.HOSPITAL_TYPES
+    # Get unique values for filters
+    cities = Hospital.objects.values_list('city', flat=True).distinct().order_by('city')
+    pincodes = Hospital.objects.values_list('pincode', flat=True).distinct().order_by('pincode')
+    types = Hospital.HOSPITAL_TYPES
 
-        # Enrich hospitals for template
-        enriched_hospitals = []
-        for h in hospitals:
-            # Get facility highlights
-            facilities = h.facilities or {}
-            key_equipment = []
-            if facilities.get('xray'):
-                key_equipment.append('X-Ray')
-            if facilities.get('mri'):
-                key_equipment.append('MRI')
-            if facilities.get('ct_scan'):
-                key_equipment.append('CT Scan')
-            
-            enriched_hospitals.append({
-                'id': h.id,
-                'name': h.name,
-                'address': h.address,
-                'city': h.city,
-                'rating': h.rating,
-                'rating_range': range(int(h.rating)) if h.rating else [], # For star loop
-                'hospital_type': h.get_hospital_type_display(),
-                'type_code': h.hospital_type,
-                'lat': h.lat,
-                'lng': h.lng,
-                'map_url': f"https://www.google.com/maps?q={h.lat},{h.lng}" if h.lat and h.lng else None,
-                'specialities': h.specialities[:3], # Show first 3
-                'more_specialities_count': len(h.specialities) - 3 if len(h.specialities) > 3 else 0,
-                'total_beds': h.total_beds,
-                'key_equipment': key_equipment,
-                'doctor_count': h.doctors.count(),
-                'has_ambulance': facilities.get('ambulance', False),
-                'ambulance_contact': h.ambulance_contact
-            })
+    # Enrich hospitals for template
+    enriched_hospitals = []
+    for h in hospitals:
+        # Get facility highlights
+        facilities = h.facilities or {}
+        key_equipment = []
+        if facilities.get('xray'):
+            key_equipment.append('X-Ray')
+        if facilities.get('mri'):
+            key_equipment.append('MRI')
+        if facilities.get('ct_scan'):
+            key_equipment.append('CT Scan')
+        
+        enriched_hospitals.append({
+            'id': h.id,
+            'name': h.name,
+            'address': h.address,
+            'city': h.city,
+            'pincode': h.pincode,
+            'rating': h.rating,
+            'rating_range': range(int(h.rating)) if h.rating else [], # For star loop
+            'hospital_type': h.get_hospital_type_display(),
+            'type_code': h.hospital_type,
+            'lat': h.lat,
+            'lng': h.lng,
+            'map_url': f"https://www.google.com/maps?q={h.lat},{h.lng}" if h.lat and h.lng else None,
+            'specialities': h.specialities[:3], # Show first 3
+            'more_specialities_count': len(h.specialities) - 3 if len(h.specialities) > 3 else 0,
+            'total_beds': h.total_beds,
+            'key_equipment': key_equipment,
+            'doctor_count': h.doctors.count(),
+            'has_ambulance': facilities.get('ambulance', False),
+            'ambulance_contact': h.ambulance_contact
+        })
 
-
-        context = {
-            'hospitals': enriched_hospitals,
-            'cities': cities,
-            'hospital_type_choices': types, 
-            'current_filters': {
-                'city': city_filter,
-                'type': type_filter,
-                'rating': rating_filter
-            }
+    context = {
+        'hospitals': enriched_hospitals,
+        'cities': cities,
+        'pincodes': pincodes,
+        'hospital_type_choices': types,
+        'current_filters': {
+            'city': city_filter,
+            'type': type_filter,
+            'rating': rating_filter,
+            'pincode': pincode_filter,
         }
-        return render(request, 'core/all_hospitals.html', context)
-    except Exception as e:
-        print(f"Error in all_hospitals: {e}")
-        return render(request, 'core/index.html', {'error': 'Failed to load hospitals'})
+    }
+    return render(request, 'core/all_hospitals.html', context)
 
 def hospital_detail(request, pk):
     hospital = get_object_or_404(Hospital, pk=pk)
@@ -190,3 +211,64 @@ def hospital_detail(request, pk):
         'facilities': hospital.facilities or {},
     }
     return render(request, 'core/hospital_detail.html', context)
+
+
+# ─── Lab Report Analyser ─────────────────────────────────────────────────────
+
+def lab_report_page(request):
+    """Render the lab report upload page with the last 3 months of history."""
+    cutoff = timezone.now() - timedelta(days=90)
+    history = LabReportHistory.objects.filter(created_at__gte=cutoff)
+    return render(request, 'core/lab_report.html', {'history': history})
+
+
+@csrf_exempt
+def analyze_lab_report_view(request):
+    """POST endpoint: receive a lab report file, analyse with Gemini, save to history."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    ALLOWED_MIME = {
+        'image/jpeg': 'image/jpeg',
+        'image/jpg':  'image/jpeg',
+        'image/png':  'image/png',
+        'application/pdf': 'application/pdf',
+    }
+
+    file_obj = request.FILES.get('report')
+    if not file_obj:
+        return JsonResponse({'error': 'No file uploaded. Please attach a lab report.'}, status=400)
+
+    mime_type = file_obj.content_type
+    if mime_type not in ALLOWED_MIME:
+        return JsonResponse(
+            {'error': 'Unsupported file type. Please upload a JPG, PNG, or PDF.'},
+            status=400
+        )
+
+    try:
+        file_bytes = file_obj.read()
+
+        # Detect active language for translation
+        lang_code = get_language() or 'en'
+        lang_name = LANG_NAMES.get(lang_code, 'English')
+
+        # Step 1: Analyze the report in English (reliable medical JSON)
+        result = gemini_analyze_lab(file_bytes, ALLOWED_MIME[mime_type], file_obj.name)
+
+        # Step 2: If a non-English language is active, translate all text fields
+        if lang_name != 'English' and 'error' not in result:
+            result = translate_lab_result(result, lang_name)
+
+        # Save to history (English or translated — save whatever the user sees)
+        if 'error' not in result:
+            LabReportHistory.objects.create(
+                filename=file_obj.name,
+                analysis=result
+            )
+
+        return JsonResponse({'analysis': result, 'response_language': lang_name})
+
+    except Exception as e:
+        print(f"Lab report view error: {e}")
+        return JsonResponse({'error': 'Analysis failed. Please try again.'}, status=500)
